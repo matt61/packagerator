@@ -5,7 +5,7 @@
             <connections>
                 <connection id="default">
                     <adapter>mysql</adapter>
-                    <dsn>mysql:host=localhost;port=3306;dbname=configuration_management</dsn>
+                    <dsn>mysql:host=localhost;port=3306;dbname=packagerator</dsn>
                     <user>root</user>
                     <password></password>
                     <settings>
