@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
+    <vendor type="mysql">
+        <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+    <table name="package" idMethod="native">
+        <column name="id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="name" type="VARCHAR" size="50"/>
+        <column name="package_version_id" type="INTEGER"/>
+        <foreign-key foreignTable="package_version">
+            <reference local="package_version_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    <table name="package_dependancy" idMethod="native" phpName="PackageDependancy">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="package_id" type="INTEGER"/>
+        <column name="package_version_id" type="INTEGER"/>
+        <foreign-key foreignTable="package">
+            <reference local="package_id" foreign="id"/>
+            <reference local="package_version_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="package_version">
+            <reference local="package_version_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    <table name="package_dependancy_artifact" idMethod="native" phpName="PackageDependancyArtifact">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="package_id" type="INTEGER"/>
+        <column name="package_version_id" type="INTEGER"/>
+        <column name="checksum" phpName="Checksum" type="VARCHAR" size="50"/>
+        <column name="artifact_type_id" phpName="ArtifactTypeId" type="INTEGER"/>
+        <column name="artifact_path" phpName="ArtifactPath" type="VARCHAR" size="50"/>
+    </table>
+    <table name="package_dependancy_property_type" idMethod="native" phpName="PackageDependancyPropertyType">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="configuration_id" phpName="ConfigurationId" type="INTEGER"/>
+        <column name="property_type_id" phpName="PropertyTypeId" type="INTEGER"/>
+        <column name="version_id" phpName="VersionId" type="INTEGER"/>
+    </table>
+    <table name="package_permission" idMethod="native" phpName="PackagePermission">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="package_id" phpName="PackageId" type="INTEGER"/>
+        <column name="user_group_id" phpName="UserGroupId" type="INTEGER"/>
+    </table>
+    <table name="package_role" idMethod="native" phpName="PackageRole">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="package_id" phpName="PackageId" type="INTEGER"/>
+        <column name="role_id" phpName="RoleId" type="INTEGER"/>
+    </table>
+    <table name="package_step" idMethod="native" phpName="PackageStep">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="package_id" phpName="PackageId" type="INTEGER"/>
+        <column name="sequence_id" phpName="SequenceId" type="INTEGER"/>
+        <column name="version_id" phpName="VersionId" type="INTEGER"/>
+        <column name="step_type" phpName="StepType" type="CHAR"
+                sqlType="enum('install','uninstall','validate','upgrade','downgrade')"/>
+        <column name="related_package_id" phpName="RelatedPackageId" type="INTEGER"/>
+    </table>
+    <table name="package_step_execution" idMethod="native" phpName="PackageStepExecution">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="package_step_id" phpName="PackageStepId" type="INTEGER"/>
+        <column name="version_id" phpName="VersionId" type="INTEGER"/>
+        <column name="sequence_id" phpName="SequenceId" type="INTEGER"/>
+        <column name="input" phpName="Input" type="VARCHAR" size="50"/>
+        <column name="output_code" phpName="OutputCode" type="INTEGER"/>
+        <column name="output_pattern" phpName="OutputPattern" type="VARCHAR" size="50"/>
+    </table>
+    <table name="package_version" idMethod="native" phpName="PackageVersion">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="user_id" phpName="UserId" type="INTEGER"/>
+        <column name="created_at" phpName="CreatedAt" type="TIMESTAMP"/>
+        <column name="description" phpName="Description" type="VARCHAR" size="50"/>
+    </table>
+    <table name="property" idMethod="native" phpName="Property">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="property_type_id" phpName="PropertyTypeId" type="INTEGER"/>
+        <column name="value" phpName="Value" type="VARCHAR" size="50"/>
+        <column name="version_id" phpName="VersionId" type="INTEGER"/>
+        <column name="property_group_id" phpName="PropertyGroupId" type="INTEGER"/>
+    </table>
+    <table name="property_group" idMethod="native" phpName="PropertyGroup">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="name" phpName="Name" type="VARCHAR" size="50"/>
+        <column name="version_id" phpName="VersionId" type="INTEGER"/>
+    </table>
+    <table name="property_group_permission" idMethod="native" phpName="PropertyGroupPermission">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="property_group_id" phpName="PropertyGroupId" type="INTEGER"/>
+        <column name="user_group_id" phpName="UserGroupId" type="INTEGER"/>
+    </table>
+    <table name="property_group_role" idMethod="native" phpName="PropertyGroupRole">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="property_group_id" phpName="PropertyGroupId" type="INTEGER"/>
+        <column name="role_id" phpName="RoleId" type="INTEGER"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="property_type" idMethod="native" phpName="PropertyType">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="name" phpName="Name" type="VARCHAR" size="50"/>
+        <column name="property_type_id" phpName="PropertyTypeId" type="INTEGER"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="role" idMethod="native" phpName="Role">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="target" idMethod="native" phpName="Target">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="name" phpName="Name" type="VARCHAR" size="50"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="target_group" idMethod="native" phpName="TargetGroup">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="name" phpName="Name" type="VARCHAR" size="50"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="target_group_membership" idMethod="native" phpName="TargetGroupMembership">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="deployment_group_id" phpName="DeploymentGroupId" type="INTEGER" required="true"/>
+        <column name="deployment_target_id" phpName="DeploymentTargetId" type="INTEGER" required="true"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="target_group_permission" idMethod="native" phpName="TargetGroupPermission">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="target_group_id" phpName="TargetGroupId" type="INTEGER"/>
+        <column name="user_group_id" phpName="UserGroupId" type="INTEGER"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="target_package_status" idMethod="native" phpName="TargetPackageStatus">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="name" phpName="Name" type="VARCHAR" size="50"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="target_role" idMethod="native" phpName="TargetRole">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="target_id" phpName="TargetId" type="INTEGER"/>
+        <column name="role_id" phpName="RoleId" type="INTEGER"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="user" idMethod="native" phpName="User">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="email" phpName="Email" type="VARCHAR" size="11"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="user_group" idMethod="native" phpName="UserGroup">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="name" phpName="Name" type="VARCHAR" size="50"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="user_group_membership" idMethod="native" phpName="UserGroupMembership">
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
+                required="true"/>
+        <column name="user_group_id" phpName="UserGroupId" type="INTEGER"/>
+        <column name="user_id" phpName="UserId" type="INTEGER"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+</database>
