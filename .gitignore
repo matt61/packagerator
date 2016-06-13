@@ -2,7 +2,7 @@
 /logs/*
 !/logs/README.md
 .idea
-model/Packagerator/Base
-model/Packagerator/Map
+src/model/Packagerator/Model/Base
+src/model/Packagerator/Model/Map
 config/config.php
-sql/*
+sql/default.sql

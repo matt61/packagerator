@@ -8,7 +8,10 @@
         "twig/twig": "^1.24"
     },
     "autoload": {
-        "psr-0": { "Packagerator": "model/Packagerator" }
+        "psr-0": {
+            "Packagerator\\Model": "model/Packagerator",
+            "Packagerator\\Controller": "controller/Packagerator"
+        }
     },
     "scripts": {
         "post-install-cmd": [
