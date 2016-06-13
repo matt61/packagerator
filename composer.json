@@ -4,14 +4,15 @@
         "php": ">=5.5.0",
         "propel/propel": "~2.0@dev",
         "silex/silex": "1.3",
-        "propel/propel-service-provider": "2.x@dev"
+        "propel/propel-service-provider": "2.x@dev",
+        "twig/twig": "^1.24"
     },
     "autoload": {
-        "psr-0": { "Packagerator": "src/model/Packagerator" }
+        "psr-0": { "Packagerator": "model/Packagerator" }
     },
     "scripts": {
         "post-install-cmd": [
-            "vendor/bin/propel build --output-dir src/model",
+            "vendor/bin/propel build --output-dir model"
         ]
     }
 }
