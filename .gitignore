@@ -5,3 +5,4 @@
 src/model/Packagerator/Base
 src/model/Packagerator/Map
 config/config.php
+sql/*
