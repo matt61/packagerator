@@ -137,8 +137,8 @@ class TargetGroupPermissionTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('target_group_id', 'TargetGroupId', 'INTEGER', false, null, null);
-        $this->addColumn('user_group_id', 'UserGroupId', 'INTEGER', false, null, null);
+        $this->addForeignKey('target_group_id', 'TargetGroupId', 'INTEGER', 'target_group', 'id', true, null, null);
+        $this->addForeignKey('user_group_id', 'UserGroupId', 'INTEGER', 'user_group', 'id', true, null, null);
     } // initialize()
 
     /**
@@ -146,6 +146,20 @@ class TargetGroupPermissionTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('TargetGroup', '\\Packagerator\\Model\\TargetGroup', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':target_group_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('UserGroup', '\\Packagerator\\Model\\UserGroup', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_group_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
     } // buildRelations()
 
     /**

@@ -132,7 +132,7 @@ class UserTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('email', 'Email', 'VARCHAR', false, 11, null);
+        $this->addColumn('email', 'Email', 'VARCHAR', true, 25, null);
     } // initialize()
 
     /**
@@ -140,6 +140,13 @@ class UserTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('UserGroupMembership', '\\Packagerator\\Model\\UserGroupMembership', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'UserGroupMemberships', false);
     } // buildRelations()
 
     /**

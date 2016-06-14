@@ -59,7 +59,7 @@ class PackageRoleTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class PackageRoleTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the id field
@@ -87,6 +87,11 @@ class PackageRoleTableMap extends TableMap
     const COL_ROLE_ID = 'package_role.role_id';
 
     /**
+     * the column name for the version field
+     */
+    const COL_VERSION = 'package_role.version';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -98,11 +103,11 @@ class PackageRoleTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'PackageId', 'RoleId', ),
-        self::TYPE_CAMELNAME     => array('id', 'packageId', 'roleId', ),
-        self::TYPE_COLNAME       => array(PackageRoleTableMap::COL_ID, PackageRoleTableMap::COL_PACKAGE_ID, PackageRoleTableMap::COL_ROLE_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'package_id', 'role_id', ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Id', 'PackageId', 'RoleId', 'Version', ),
+        self::TYPE_CAMELNAME     => array('id', 'packageId', 'roleId', 'version', ),
+        self::TYPE_COLNAME       => array(PackageRoleTableMap::COL_ID, PackageRoleTableMap::COL_PACKAGE_ID, PackageRoleTableMap::COL_ROLE_ID, PackageRoleTableMap::COL_VERSION, ),
+        self::TYPE_FIELDNAME     => array('id', 'package_id', 'role_id', 'version', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -112,11 +117,11 @@ class PackageRoleTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'PackageId' => 1, 'RoleId' => 2, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'packageId' => 1, 'roleId' => 2, ),
-        self::TYPE_COLNAME       => array(PackageRoleTableMap::COL_ID => 0, PackageRoleTableMap::COL_PACKAGE_ID => 1, PackageRoleTableMap::COL_ROLE_ID => 2, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'package_id' => 1, 'role_id' => 2, ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'PackageId' => 1, 'RoleId' => 2, 'Version' => 3, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'packageId' => 1, 'roleId' => 2, 'version' => 3, ),
+        self::TYPE_COLNAME       => array(PackageRoleTableMap::COL_ID => 0, PackageRoleTableMap::COL_PACKAGE_ID => 1, PackageRoleTableMap::COL_ROLE_ID => 2, PackageRoleTableMap::COL_VERSION => 3, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'package_id' => 1, 'role_id' => 2, 'version' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -137,8 +142,9 @@ class PackageRoleTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('package_id', 'PackageId', 'INTEGER', false, null, null);
-        $this->addColumn('role_id', 'RoleId', 'INTEGER', false, null, null);
+        $this->addForeignKey('package_id', 'PackageId', 'INTEGER', 'package', 'id', true, null, null);
+        $this->addForeignKey('role_id', 'RoleId', 'INTEGER', 'role', 'id', true, null, null);
+        $this->addColumn('version', 'Version', 'INTEGER', false, null, 0);
     } // initialize()
 
     /**
@@ -146,7 +152,50 @@ class PackageRoleTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Package', '\\Packagerator\\Model\\Package', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':package_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Role', '\\Packagerator\\Model\\Role', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':role_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('PackageRoleVersion', '\\Packagerator\\Model\\PackageRoleVersion', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':id',
+    1 => ':id',
+  ),
+), 'CASCADE', null, 'PackageRoleVersions', false);
     } // buildRelations()
+
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return array(
+            'versionable' => array('version_column' => 'version', 'version_table' => '', 'log_created_at' => 'false', 'log_created_by' => 'false', 'log_comment' => 'false', 'version_created_at_column' => 'version_created_at', 'version_created_by_column' => 'version_created_by', 'version_comment_column' => 'version_comment', 'indices' => 'false', ),
+        );
+    } // getBehaviors()
+    /**
+     * Method to invalidate the instance pool of all tables related to package_role     * by a foreign key with ON DELETE CASCADE
+     */
+    public static function clearRelatedInstancePool()
+    {
+        // Invalidate objects in related instance pools,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        PackageRoleVersionTableMap::clearInstancePool();
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -292,10 +341,12 @@ class PackageRoleTableMap extends TableMap
             $criteria->addSelectColumn(PackageRoleTableMap::COL_ID);
             $criteria->addSelectColumn(PackageRoleTableMap::COL_PACKAGE_ID);
             $criteria->addSelectColumn(PackageRoleTableMap::COL_ROLE_ID);
+            $criteria->addSelectColumn(PackageRoleTableMap::COL_VERSION);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.package_id');
             $criteria->addSelectColumn($alias . '.role_id');
+            $criteria->addSelectColumn($alias . '.version');
         }
     }
 

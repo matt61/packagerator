@@ -59,7 +59,7 @@ class RoleTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 1;
+    const NUM_COLUMNS = 2;
 
     /**
      * The number of lazy-loaded columns
@@ -69,12 +69,17 @@ class RoleTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 1;
+    const NUM_HYDRATE_COLUMNS = 2;
 
     /**
      * the column name for the id field
      */
     const COL_ID = 'role.id';
+
+    /**
+     * the column name for the name field
+     */
+    const COL_NAME = 'role.name';
 
     /**
      * The default string format for model objects of the related table
@@ -88,11 +93,11 @@ class RoleTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', ),
-        self::TYPE_CAMELNAME     => array('id', ),
-        self::TYPE_COLNAME       => array(RoleTableMap::COL_ID, ),
-        self::TYPE_FIELDNAME     => array('id', ),
-        self::TYPE_NUM           => array(0, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', ),
+        self::TYPE_COLNAME       => array(RoleTableMap::COL_ID, RoleTableMap::COL_NAME, ),
+        self::TYPE_FIELDNAME     => array('id', 'name', ),
+        self::TYPE_NUM           => array(0, 1, )
     );
 
     /**
@@ -102,11 +107,11 @@ class RoleTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, ),
-        self::TYPE_COLNAME       => array(RoleTableMap::COL_ID => 0, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, ),
-        self::TYPE_NUM           => array(0, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, ),
+        self::TYPE_COLNAME       => array(RoleTableMap::COL_ID => 0, RoleTableMap::COL_NAME => 1, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, ),
+        self::TYPE_NUM           => array(0, 1, )
     );
 
     /**
@@ -127,6 +132,7 @@ class RoleTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
     } // initialize()
 
     /**
@@ -134,6 +140,20 @@ class RoleTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('PackageRole', '\\Packagerator\\Model\\PackageRole', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':role_id',
+    1 => ':id',
+  ),
+), null, null, 'PackageRoles', false);
+        $this->addRelation('TargetRole', '\\Packagerator\\Model\\TargetRole', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':role_id',
+    1 => ':id',
+  ),
+), null, null, 'TargetRoles', false);
     } // buildRelations()
 
     /**
@@ -278,8 +298,10 @@ class RoleTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(RoleTableMap::COL_ID);
+            $criteria->addSelectColumn(RoleTableMap::COL_NAME);
         } else {
             $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.name');
         }
     }
 

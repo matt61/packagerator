@@ -132,7 +132,7 @@ class TargetGroupTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', false, 50, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
     } // initialize()
 
     /**
@@ -140,6 +140,20 @@ class TargetGroupTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Target', '\\Packagerator\\Model\\Target', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':target_group_id',
+    1 => ':id',
+  ),
+), null, null, 'Targets', false);
+        $this->addRelation('TargetGroupPermission', '\\Packagerator\\Model\\TargetGroupPermission', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':target_group_id',
+    1 => ':id',
+  ),
+), null, null, 'TargetGroupPermissions', false);
     } // buildRelations()
 
     /**

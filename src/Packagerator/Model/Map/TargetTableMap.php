@@ -59,7 +59,7 @@ class TargetTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 2;
+    const NUM_COLUMNS = 5;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class TargetTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 2;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /**
      * the column name for the id field
@@ -80,6 +80,21 @@ class TargetTableMap extends TableMap
      * the column name for the name field
      */
     const COL_NAME = 'target.name';
+
+    /**
+     * the column name for the ip field
+     */
+    const COL_IP = 'target.ip';
+
+    /**
+     * the column name for the target_group_id field
+     */
+    const COL_TARGET_GROUP_ID = 'target.target_group_id';
+
+    /**
+     * the column name for the version field
+     */
+    const COL_VERSION = 'target.version';
 
     /**
      * The default string format for model objects of the related table
@@ -93,11 +108,11 @@ class TargetTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', ),
-        self::TYPE_COLNAME       => array(TargetTableMap::COL_ID, TargetTableMap::COL_NAME, ),
-        self::TYPE_FIELDNAME     => array('id', 'name', ),
-        self::TYPE_NUM           => array(0, 1, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'Ip', 'TargetGroupId', 'Version', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'ip', 'targetGroupId', 'version', ),
+        self::TYPE_COLNAME       => array(TargetTableMap::COL_ID, TargetTableMap::COL_NAME, TargetTableMap::COL_IP, TargetTableMap::COL_TARGET_GROUP_ID, TargetTableMap::COL_VERSION, ),
+        self::TYPE_FIELDNAME     => array('id', 'name', 'ip', 'target_group_id', 'version', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -107,11 +122,11 @@ class TargetTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, ),
-        self::TYPE_COLNAME       => array(TargetTableMap::COL_ID => 0, TargetTableMap::COL_NAME => 1, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, ),
-        self::TYPE_NUM           => array(0, 1, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Ip' => 2, 'TargetGroupId' => 3, 'Version' => 4, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'ip' => 2, 'targetGroupId' => 3, 'version' => 4, ),
+        self::TYPE_COLNAME       => array(TargetTableMap::COL_ID => 0, TargetTableMap::COL_NAME => 1, TargetTableMap::COL_IP => 2, TargetTableMap::COL_TARGET_GROUP_ID => 3, TargetTableMap::COL_VERSION => 4, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'ip' => 2, 'target_group_id' => 3, 'version' => 4, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -132,7 +147,10 @@ class TargetTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', false, 50, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
+        $this->addColumn('ip', 'Ip', 'VARCHAR', true, 50, null);
+        $this->addForeignKey('target_group_id', 'TargetGroupId', 'INTEGER', 'target_group', 'id', true, null, null);
+        $this->addColumn('version', 'Version', 'INTEGER', false, null, 0);
     } // initialize()
 
     /**
@@ -140,7 +158,57 @@ class TargetTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('TargetGroup', '\\Packagerator\\Model\\TargetGroup', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':target_group_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('TargetPackageDeployment', '\\Packagerator\\Model\\TargetPackageDeployment', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':target_id',
+    1 => ':id',
+  ),
+), null, null, 'TargetPackageDeployments', false);
+        $this->addRelation('TargetRole', '\\Packagerator\\Model\\TargetRole', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':target_id',
+    1 => ':id',
+  ),
+), null, null, 'TargetRoles', false);
+        $this->addRelation('TargetVersion', '\\Packagerator\\Model\\TargetVersion', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':id',
+    1 => ':id',
+  ),
+), 'CASCADE', null, 'TargetVersions', false);
     } // buildRelations()
+
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return array(
+            'versionable' => array('version_column' => 'version', 'version_table' => '', 'log_created_at' => 'false', 'log_created_by' => 'false', 'log_comment' => 'false', 'version_created_at_column' => 'version_created_at', 'version_created_by_column' => 'version_created_by', 'version_comment_column' => 'version_comment', 'indices' => 'false', ),
+        );
+    } // getBehaviors()
+    /**
+     * Method to invalidate the instance pool of all tables related to target     * by a foreign key with ON DELETE CASCADE
+     */
+    public static function clearRelatedInstancePool()
+    {
+        // Invalidate objects in related instance pools,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        TargetVersionTableMap::clearInstancePool();
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -285,9 +353,15 @@ class TargetTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(TargetTableMap::COL_ID);
             $criteria->addSelectColumn(TargetTableMap::COL_NAME);
+            $criteria->addSelectColumn(TargetTableMap::COL_IP);
+            $criteria->addSelectColumn(TargetTableMap::COL_TARGET_GROUP_ID);
+            $criteria->addSelectColumn(TargetTableMap::COL_VERSION);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.ip');
+            $criteria->addSelectColumn($alias . '.target_group_id');
+            $criteria->addSelectColumn($alias . '.version');
         }
     }
 

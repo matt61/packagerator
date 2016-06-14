@@ -132,7 +132,7 @@ class TargetPackageStatusTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', false, 50, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
     } // initialize()
 
     /**
@@ -140,6 +140,13 @@ class TargetPackageStatusTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('TargetPackageDeployment', '\\Packagerator\\Model\\TargetPackageDeployment', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':target_package_status_id',
+    1 => ':id',
+  ),
+), null, null, 'TargetPackageDeployments', false);
     } // buildRelations()
 
     /**

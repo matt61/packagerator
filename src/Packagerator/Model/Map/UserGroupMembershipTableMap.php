@@ -137,8 +137,8 @@ class UserGroupMembershipTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('user_group_id', 'UserGroupId', 'INTEGER', false, null, null);
-        $this->addColumn('user_id', 'UserId', 'INTEGER', false, null, null);
+        $this->addForeignKey('user_group_id', 'UserGroupId', 'INTEGER', 'user_group', 'id', true, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'user', 'id', true, null, null);
     } // initialize()
 
     /**
@@ -146,6 +146,20 @@ class UserGroupMembershipTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('User', '\\Packagerator\\Model\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('UserGroup', '\\Packagerator\\Model\\UserGroup', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_group_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
     } // buildRelations()
 
     /**

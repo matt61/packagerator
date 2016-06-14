@@ -167,6 +167,20 @@ class PackageTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'PackageDependancyArtifacts', false);
+        $this->addRelation('PackagePermission', '\\Packagerator\\Model\\PackagePermission', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':package_id',
+    1 => ':id',
+  ),
+), null, null, 'PackagePermissions', false);
+        $this->addRelation('PackageRole', '\\Packagerator\\Model\\PackageRole', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':package_id',
+    1 => ':id',
+  ),
+), null, null, 'PackageRoles', false);
         $this->addRelation('Step', '\\Packagerator\\Model\\PackageStep', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -181,6 +195,13 @@ class PackageTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'PackageStepsRelatedByRelatedPackageId', false);
+        $this->addRelation('TargetPackageDeployment', '\\Packagerator\\Model\\TargetPackageDeployment', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':package_id',
+    1 => ':id',
+  ),
+), null, null, 'TargetPackageDeployments', false);
         $this->addRelation('PackageVersion', '\\Packagerator\\Model\\PackageVersion', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

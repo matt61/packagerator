@@ -132,7 +132,7 @@ class UserGroupTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', false, 50, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
     } // initialize()
 
     /**
@@ -140,6 +140,34 @@ class UserGroupTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('PackagePermission', '\\Packagerator\\Model\\PackagePermission', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_group_id',
+    1 => ':id',
+  ),
+), null, null, 'PackagePermissions', false);
+        $this->addRelation('PropertySetPermission', '\\Packagerator\\Model\\PropertySetPermission', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_group_id',
+    1 => ':id',
+  ),
+), null, null, 'PropertySetPermissions', false);
+        $this->addRelation('TargetGroupPermission', '\\Packagerator\\Model\\TargetGroupPermission', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_group_id',
+    1 => ':id',
+  ),
+), null, null, 'TargetGroupPermissions', false);
+        $this->addRelation('UserGroupMembership', '\\Packagerator\\Model\\UserGroupMembership', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_group_id',
+    1 => ':id',
+  ),
+), null, null, 'UserGroupMemberships', false);
     } // buildRelations()
 
     /**
