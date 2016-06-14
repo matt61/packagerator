@@ -152,8 +152,8 @@ class PackageDependancyVersionTableMap extends TableMap
         $this->setUseIdGenerator(false);
         // columns
         $this->addForeignPrimaryKey('id', 'Id', 'INTEGER' , 'package_dependancy', 'id', true, null, null);
-        $this->addColumn('package_id', 'PackageId', 'INTEGER', false, null, null);
-        $this->addColumn('required_package_id', 'RequiredPackageId', 'INTEGER', false, null, null);
+        $this->addColumn('package_id', 'PackageId', 'INTEGER', true, null, null);
+        $this->addColumn('required_package_id', 'RequiredPackageId', 'INTEGER', true, null, null);
         $this->addPrimaryKey('version', 'Version', 'INTEGER', true, null, 0);
         $this->addColumn('package_id_version', 'PackageIdVersion', 'INTEGER', false, null, 0);
         $this->addColumn('required_package_id_version', 'RequiredPackageIdVersion', 'INTEGER', false, null, 0);

@@ -142,8 +142,8 @@ class PackageDependancyTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('package_id', 'PackageId', 'INTEGER', 'package', 'id', false, null, null);
-        $this->addForeignKey('required_package_id', 'RequiredPackageId', 'INTEGER', 'package', 'id', false, null, null);
+        $this->addForeignKey('package_id', 'PackageId', 'INTEGER', 'package', 'id', true, null, null);
+        $this->addForeignKey('required_package_id', 'RequiredPackageId', 'INTEGER', 'package', 'id', true, null, null);
         $this->addColumn('version', 'Version', 'INTEGER', false, null, 0);
     } // initialize()
 

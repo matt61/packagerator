@@ -31,9 +31,10 @@
             <unique-column name="name"/>
         </unique>
     </table>
-    <table name="package_dependancy_artifact" idMethod="native" phpName="PackageDependancyArtifact">
+    <table name="package_dependancy_artifact">
         <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
         <column name="package_id" type="INTEGER" required="true"/>
+        <column name="name" type="VARCHAR" size="50" required="true"/>
         <column name="checksum" type="VARCHAR" size="50" required="true"/>
         <column name="artifact_type_id" type="INTEGER" required="true"/>
         <column name="artifact_path" type="VARCHAR" size="150" required="true"/>
@@ -43,13 +44,36 @@
         <foreign-key foreignTable="artifact_type">
             <reference local="artifact_type_id" foreign="id"/>
         </foreign-key>
+        <unique>
+            <unique-column name="name"/>
+            <unique-column name="version"/>
+            <unique-column name="package_id"/>
+        </unique>
         <behavior name="versionable" />
     </table>
-    <table name="package_dependancy_property_type" idMethod="native" phpName="PackageDependancyPropertyType">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="configuration_id" phpName="ConfigurationId" type="INTEGER"/>
-        <column name="property_type_id" phpName="PropertyTypeId" type="INTEGER"/>
-        <column name="version_id" phpName="VersionId" type="INTEGER"/>
+    <table name="property_type">
+        <column name="id" type="VARCHAR" size="50" primaryKey="true" required="true"/>
+        <column name="name" type="VARCHAR" size="50"/>
+        <unique>
+            <unique-column name="name"/>
+        </unique>
+    </table>
+    <table name="package_step_property">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="package_step_id" type="INTEGER"/>
+        <column name="property_type_id" type="VARCHAR" size="50"/>
+        <unique>
+            <unique-column name="package_step_id"/>
+            <unique-column name="version"/>
+            <unique-column name="property_type_id"/>
+        </unique>
+        <foreign-key foreignTable="package_step">
+            <reference local="package_step_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="property_type" onDelete="restrict">
+            <reference local="property_type_id" foreign="id"/>
+        </foreign-key>
+        <behavior name="versionable" />
     </table>
     <table name="package_permission" idMethod="native" phpName="PackagePermission">
         <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
@@ -120,8 +144,7 @@
         <behavior name="versionable"/>
     </table>
     <table name="property" idMethod="native" phpName="Property">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
-                required="true"/>
+        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
         <column name="property_type_id" phpName="PropertyTypeId" type="INTEGER"/>
         <column name="value" phpName="Value" type="VARCHAR" size="50"/>
         <column name="version_id" phpName="VersionId" type="INTEGER"/>
@@ -144,15 +167,6 @@
                 required="true"/>
         <column name="property_group_id" phpName="PropertyGroupId" type="INTEGER"/>
         <column name="role_id" phpName="RoleId" type="INTEGER"/>
-        <vendor type="mysql">
-            <parameter name="Engine" value="InnoDB"/>
-        </vendor>
-    </table>
-    <table name="property_type" idMethod="native" phpName="PropertyType">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
-                required="true"/>
-        <column name="name" phpName="Name" type="VARCHAR" size="50"/>
-        <column name="property_type_id" phpName="PropertyTypeId" type="INTEGER"/>
         <vendor type="mysql">
             <parameter name="Engine" value="InnoDB"/>
         </vendor>

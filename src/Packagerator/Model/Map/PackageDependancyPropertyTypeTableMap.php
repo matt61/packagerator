@@ -77,9 +77,9 @@ class PackageDependancyPropertyTypeTableMap extends TableMap
     const COL_ID = 'package_dependancy_property_type.id';
 
     /**
-     * the column name for the configuration_id field
+     * the column name for the package_id field
      */
-    const COL_CONFIGURATION_ID = 'package_dependancy_property_type.configuration_id';
+    const COL_PACKAGE_ID = 'package_dependancy_property_type.package_id';
 
     /**
      * the column name for the property_type_id field
@@ -87,9 +87,9 @@ class PackageDependancyPropertyTypeTableMap extends TableMap
     const COL_PROPERTY_TYPE_ID = 'package_dependancy_property_type.property_type_id';
 
     /**
-     * the column name for the version_id field
+     * the column name for the version field
      */
-    const COL_VERSION_ID = 'package_dependancy_property_type.version_id';
+    const COL_VERSION = 'package_dependancy_property_type.version';
 
     /**
      * The default string format for model objects of the related table
@@ -103,10 +103,10 @@ class PackageDependancyPropertyTypeTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'ConfigurationId', 'PropertyTypeId', 'VersionId', ),
-        self::TYPE_CAMELNAME     => array('id', 'configurationId', 'propertyTypeId', 'versionId', ),
-        self::TYPE_COLNAME       => array(PackageDependancyPropertyTypeTableMap::COL_ID, PackageDependancyPropertyTypeTableMap::COL_CONFIGURATION_ID, PackageDependancyPropertyTypeTableMap::COL_PROPERTY_TYPE_ID, PackageDependancyPropertyTypeTableMap::COL_VERSION_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'configuration_id', 'property_type_id', 'version_id', ),
+        self::TYPE_PHPNAME       => array('Id', 'ConfigurationId', 'PropertyTypeId', 'Version', ),
+        self::TYPE_CAMELNAME     => array('id', 'configurationId', 'propertyTypeId', 'version', ),
+        self::TYPE_COLNAME       => array(PackageDependancyPropertyTypeTableMap::COL_ID, PackageDependancyPropertyTypeTableMap::COL_PACKAGE_ID, PackageDependancyPropertyTypeTableMap::COL_PROPERTY_TYPE_ID, PackageDependancyPropertyTypeTableMap::COL_VERSION, ),
+        self::TYPE_FIELDNAME     => array('id', 'package_id', 'property_type_id', 'version', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
@@ -117,10 +117,10 @@ class PackageDependancyPropertyTypeTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'ConfigurationId' => 1, 'PropertyTypeId' => 2, 'VersionId' => 3, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'configurationId' => 1, 'propertyTypeId' => 2, 'versionId' => 3, ),
-        self::TYPE_COLNAME       => array(PackageDependancyPropertyTypeTableMap::COL_ID => 0, PackageDependancyPropertyTypeTableMap::COL_CONFIGURATION_ID => 1, PackageDependancyPropertyTypeTableMap::COL_PROPERTY_TYPE_ID => 2, PackageDependancyPropertyTypeTableMap::COL_VERSION_ID => 3, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'configuration_id' => 1, 'property_type_id' => 2, 'version_id' => 3, ),
+        self::TYPE_PHPNAME       => array('Id' => 0, 'ConfigurationId' => 1, 'PropertyTypeId' => 2, 'Version' => 3, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'configurationId' => 1, 'propertyTypeId' => 2, 'version' => 3, ),
+        self::TYPE_COLNAME       => array(PackageDependancyPropertyTypeTableMap::COL_ID => 0, PackageDependancyPropertyTypeTableMap::COL_PACKAGE_ID => 1, PackageDependancyPropertyTypeTableMap::COL_PROPERTY_TYPE_ID => 2, PackageDependancyPropertyTypeTableMap::COL_VERSION => 3, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'package_id' => 1, 'property_type_id' => 2, 'version' => 3, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
@@ -142,9 +142,9 @@ class PackageDependancyPropertyTypeTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('configuration_id', 'ConfigurationId', 'INTEGER', false, null, null);
-        $this->addColumn('property_type_id', 'PropertyTypeId', 'INTEGER', false, null, null);
-        $this->addColumn('version_id', 'VersionId', 'INTEGER', false, null, null);
+        $this->addForeignKey('package_id', 'ConfigurationId', 'INTEGER', 'package', 'id', false, null, null);
+        $this->addForeignKey('property_type_id', 'PropertyTypeId', 'VARCHAR', 'property_type', 'id', false, 50, null);
+        $this->addColumn('version', 'Version', 'INTEGER', false, null, 0);
     } // initialize()
 
     /**
@@ -152,7 +152,50 @@ class PackageDependancyPropertyTypeTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Package', '\\Packagerator\\Model\\Package', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':package_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('PropertyType', '\\Packagerator\\Model\\PropertyType', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':property_type_id',
+    1 => ':id',
+  ),
+), 'RESTRICT', null, null, false);
+        $this->addRelation('PackageDependancyPropertyTypeVersion', '\\Packagerator\\Model\\PackageDependancyPropertyTypeVersion', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':id',
+    1 => ':id',
+  ),
+), 'CASCADE', null, 'PackageDependancyPropertyTypeVersions', false);
     } // buildRelations()
+
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return array(
+            'versionable' => array('version_column' => 'version', 'version_table' => '', 'log_created_at' => 'false', 'log_created_by' => 'false', 'log_comment' => 'false', 'version_created_at_column' => 'version_created_at', 'version_created_by_column' => 'version_created_by', 'version_comment_column' => 'version_comment', 'indices' => 'false', ),
+        );
+    } // getBehaviors()
+    /**
+     * Method to invalidate the instance pool of all tables related to package_dependancy_property_type     * by a foreign key with ON DELETE CASCADE
+     */
+    public static function clearRelatedInstancePool()
+    {
+        // Invalidate objects in related instance pools,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        PackageDependancyPropertyTypeVersionTableMap::clearInstancePool();
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -296,14 +339,14 @@ class PackageDependancyPropertyTypeTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(PackageDependancyPropertyTypeTableMap::COL_ID);
-            $criteria->addSelectColumn(PackageDependancyPropertyTypeTableMap::COL_CONFIGURATION_ID);
+            $criteria->addSelectColumn(PackageDependancyPropertyTypeTableMap::COL_PACKAGE_ID);
             $criteria->addSelectColumn(PackageDependancyPropertyTypeTableMap::COL_PROPERTY_TYPE_ID);
-            $criteria->addSelectColumn(PackageDependancyPropertyTypeTableMap::COL_VERSION_ID);
+            $criteria->addSelectColumn(PackageDependancyPropertyTypeTableMap::COL_VERSION);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.configuration_id');
+            $criteria->addSelectColumn($alias . '.package_id');
             $criteria->addSelectColumn($alias . '.property_type_id');
-            $criteria->addSelectColumn($alias . '.version_id');
+            $criteria->addSelectColumn($alias . '.version');
         }
     }
 

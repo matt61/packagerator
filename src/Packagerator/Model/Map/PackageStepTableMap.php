@@ -59,7 +59,7 @@ class PackageStepTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class PackageStepTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the id field
@@ -82,19 +82,14 @@ class PackageStepTableMap extends TableMap
     const COL_PACKAGE_ID = 'package_step.package_id';
 
     /**
-     * the column name for the sequence_id field
+     * the column name for the name field
      */
-    const COL_SEQUENCE_ID = 'package_step.sequence_id';
+    const COL_NAME = 'package_step.name';
 
     /**
-     * the column name for the version_id field
+     * the column name for the package_step_type_id field
      */
-    const COL_VERSION_ID = 'package_step.version_id';
-
-    /**
-     * the column name for the step_type field
-     */
-    const COL_STEP_TYPE = 'package_step.step_type';
+    const COL_PACKAGE_STEP_TYPE_ID = 'package_step.package_step_type_id';
 
     /**
      * the column name for the related_package_id field
@@ -102,9 +97,33 @@ class PackageStepTableMap extends TableMap
     const COL_RELATED_PACKAGE_ID = 'package_step.related_package_id';
 
     /**
+     * the column name for the sortable_rank field
+     */
+    const COL_SORTABLE_RANK = 'package_step.sortable_rank';
+
+    /**
+     * the column name for the version field
+     */
+    const COL_VERSION = 'package_step.version';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
+
+    // sortable behavior
+    /**
+     * rank column
+     */
+    const RANK_COL = "package_step.sortable_rank";
+
+
+
+    /**
+    * Scope column for the set
+    */
+    const SCOPE_COL = 'package_step.package_id';
+
 
     /**
      * holds an array of fieldnames
@@ -113,11 +132,11 @@ class PackageStepTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'PackageId', 'SequenceId', 'VersionId', 'StepType', 'RelatedPackageId', ),
-        self::TYPE_CAMELNAME     => array('id', 'packageId', 'sequenceId', 'versionId', 'stepType', 'relatedPackageId', ),
-        self::TYPE_COLNAME       => array(PackageStepTableMap::COL_ID, PackageStepTableMap::COL_PACKAGE_ID, PackageStepTableMap::COL_SEQUENCE_ID, PackageStepTableMap::COL_VERSION_ID, PackageStepTableMap::COL_STEP_TYPE, PackageStepTableMap::COL_RELATED_PACKAGE_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'package_id', 'sequence_id', 'version_id', 'step_type', 'related_package_id', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id', 'PackageId', 'Name', 'PackageStepTypeId', 'RelatedPackageId', 'SortableRank', 'Version', ),
+        self::TYPE_CAMELNAME     => array('id', 'packageId', 'name', 'packageStepTypeId', 'relatedPackageId', 'sortableRank', 'version', ),
+        self::TYPE_COLNAME       => array(PackageStepTableMap::COL_ID, PackageStepTableMap::COL_PACKAGE_ID, PackageStepTableMap::COL_NAME, PackageStepTableMap::COL_PACKAGE_STEP_TYPE_ID, PackageStepTableMap::COL_RELATED_PACKAGE_ID, PackageStepTableMap::COL_SORTABLE_RANK, PackageStepTableMap::COL_VERSION, ),
+        self::TYPE_FIELDNAME     => array('id', 'package_id', 'name', 'package_step_type_id', 'related_package_id', 'sortable_rank', 'version', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -127,11 +146,11 @@ class PackageStepTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'PackageId' => 1, 'SequenceId' => 2, 'VersionId' => 3, 'StepType' => 4, 'RelatedPackageId' => 5, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'packageId' => 1, 'sequenceId' => 2, 'versionId' => 3, 'stepType' => 4, 'relatedPackageId' => 5, ),
-        self::TYPE_COLNAME       => array(PackageStepTableMap::COL_ID => 0, PackageStepTableMap::COL_PACKAGE_ID => 1, PackageStepTableMap::COL_SEQUENCE_ID => 2, PackageStepTableMap::COL_VERSION_ID => 3, PackageStepTableMap::COL_STEP_TYPE => 4, PackageStepTableMap::COL_RELATED_PACKAGE_ID => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'package_id' => 1, 'sequence_id' => 2, 'version_id' => 3, 'step_type' => 4, 'related_package_id' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'PackageId' => 1, 'Name' => 2, 'PackageStepTypeId' => 3, 'RelatedPackageId' => 4, 'SortableRank' => 5, 'Version' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'packageId' => 1, 'name' => 2, 'packageStepTypeId' => 3, 'relatedPackageId' => 4, 'sortableRank' => 5, 'version' => 6, ),
+        self::TYPE_COLNAME       => array(PackageStepTableMap::COL_ID => 0, PackageStepTableMap::COL_PACKAGE_ID => 1, PackageStepTableMap::COL_NAME => 2, PackageStepTableMap::COL_PACKAGE_STEP_TYPE_ID => 3, PackageStepTableMap::COL_RELATED_PACKAGE_ID => 4, PackageStepTableMap::COL_SORTABLE_RANK => 5, PackageStepTableMap::COL_VERSION => 6, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'package_id' => 1, 'name' => 2, 'package_step_type_id' => 3, 'related_package_id' => 4, 'sortable_rank' => 5, 'version' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -152,11 +171,12 @@ class PackageStepTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('package_id', 'PackageId', 'INTEGER', false, null, null);
-        $this->addColumn('sequence_id', 'SequenceId', 'INTEGER', false, null, null);
-        $this->addColumn('version_id', 'VersionId', 'INTEGER', false, null, null);
-        $this->addColumn('step_type', 'StepType', 'CHAR', false, null, null);
-        $this->addColumn('related_package_id', 'RelatedPackageId', 'INTEGER', false, null, null);
+        $this->addForeignKey('package_id', 'PackageId', 'INTEGER', 'package', 'id', true, null, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
+        $this->addForeignKey('package_step_type_id', 'PackageStepTypeId', 'INTEGER', 'package_step_type', 'id', true, null, null);
+        $this->addForeignKey('related_package_id', 'RelatedPackageId', 'INTEGER', 'package', 'id', false, null, null);
+        $this->addColumn('sortable_rank', 'SortableRank', 'INTEGER', false, null, null);
+        $this->addColumn('version', 'Version', 'INTEGER', false, null, 0);
     } // initialize()
 
     /**
@@ -164,7 +184,72 @@ class PackageStepTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Package', '\\Packagerator\\Model\\Package', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':package_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('PackageStepType', '\\Packagerator\\Model\\PackageStepType', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':package_step_type_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('RelatedPackage', '\\Packagerator\\Model\\Package', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':related_package_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('PackageStepProperty', '\\Packagerator\\Model\\PackageStepProperty', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':package_step_id',
+    1 => ':id',
+  ),
+), null, null, 'PackageStepProperties', false);
+        $this->addRelation('PackageStepExecution', '\\Packagerator\\Model\\PackageStepExecution', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':package_step_id',
+    1 => ':id',
+  ),
+), null, null, 'PackageStepExecutions', false);
+        $this->addRelation('PackageStepVersion', '\\Packagerator\\Model\\PackageStepVersion', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':id',
+    1 => ':id',
+  ),
+), 'CASCADE', null, 'PackageStepVersions', false);
     } // buildRelations()
+
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return array(
+            'versionable' => array('version_column' => 'version', 'version_table' => '', 'log_created_at' => 'false', 'log_created_by' => 'false', 'log_comment' => 'false', 'version_created_at_column' => 'version_created_at', 'version_created_by_column' => 'version_created_by', 'version_comment_column' => 'version_comment', 'indices' => 'false', ),
+            'sortable' => array('rank_column' => 'sortable_rank', 'use_scope' => 'true', 'scope_column' => 'package_id', ),
+        );
+    } // getBehaviors()
+    /**
+     * Method to invalidate the instance pool of all tables related to package_step     * by a foreign key with ON DELETE CASCADE
+     */
+    public static function clearRelatedInstancePool()
+    {
+        // Invalidate objects in related instance pools,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        PackageStepVersionTableMap::clearInstancePool();
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -309,17 +394,19 @@ class PackageStepTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(PackageStepTableMap::COL_ID);
             $criteria->addSelectColumn(PackageStepTableMap::COL_PACKAGE_ID);
-            $criteria->addSelectColumn(PackageStepTableMap::COL_SEQUENCE_ID);
-            $criteria->addSelectColumn(PackageStepTableMap::COL_VERSION_ID);
-            $criteria->addSelectColumn(PackageStepTableMap::COL_STEP_TYPE);
+            $criteria->addSelectColumn(PackageStepTableMap::COL_NAME);
+            $criteria->addSelectColumn(PackageStepTableMap::COL_PACKAGE_STEP_TYPE_ID);
             $criteria->addSelectColumn(PackageStepTableMap::COL_RELATED_PACKAGE_ID);
+            $criteria->addSelectColumn(PackageStepTableMap::COL_SORTABLE_RANK);
+            $criteria->addSelectColumn(PackageStepTableMap::COL_VERSION);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.package_id');
-            $criteria->addSelectColumn($alias . '.sequence_id');
-            $criteria->addSelectColumn($alias . '.version_id');
-            $criteria->addSelectColumn($alias . '.step_type');
+            $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.package_step_type_id');
             $criteria->addSelectColumn($alias . '.related_package_id');
+            $criteria->addSelectColumn($alias . '.sortable_rank');
+            $criteria->addSelectColumn($alias . '.version');
         }
     }
 

@@ -59,7 +59,7 @@ class PackageDependancyArtifactTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class PackageDependancyArtifactTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the id field
@@ -82,9 +82,9 @@ class PackageDependancyArtifactTableMap extends TableMap
     const COL_PACKAGE_ID = 'package_dependancy_artifact.package_id';
 
     /**
-     * the column name for the package_version_id field
+     * the column name for the name field
      */
-    const COL_PACKAGE_VERSION_ID = 'package_dependancy_artifact.package_version_id';
+    const COL_NAME = 'package_dependancy_artifact.name';
 
     /**
      * the column name for the checksum field
@@ -102,6 +102,11 @@ class PackageDependancyArtifactTableMap extends TableMap
     const COL_ARTIFACT_PATH = 'package_dependancy_artifact.artifact_path';
 
     /**
+     * the column name for the version field
+     */
+    const COL_VERSION = 'package_dependancy_artifact.version';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -113,11 +118,11 @@ class PackageDependancyArtifactTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'PackageId', 'PackageVersionId', 'Checksum', 'ArtifactTypeId', 'ArtifactPath', ),
-        self::TYPE_CAMELNAME     => array('id', 'packageId', 'packageVersionId', 'checksum', 'artifactTypeId', 'artifactPath', ),
-        self::TYPE_COLNAME       => array(PackageDependancyArtifactTableMap::COL_ID, PackageDependancyArtifactTableMap::COL_PACKAGE_ID, PackageDependancyArtifactTableMap::COL_PACKAGE_VERSION_ID, PackageDependancyArtifactTableMap::COL_CHECKSUM, PackageDependancyArtifactTableMap::COL_ARTIFACT_TYPE_ID, PackageDependancyArtifactTableMap::COL_ARTIFACT_PATH, ),
-        self::TYPE_FIELDNAME     => array('id', 'package_id', 'package_version_id', 'checksum', 'artifact_type_id', 'artifact_path', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id', 'PackageId', 'Name', 'Checksum', 'ArtifactTypeId', 'ArtifactPath', 'Version', ),
+        self::TYPE_CAMELNAME     => array('id', 'packageId', 'name', 'checksum', 'artifactTypeId', 'artifactPath', 'version', ),
+        self::TYPE_COLNAME       => array(PackageDependancyArtifactTableMap::COL_ID, PackageDependancyArtifactTableMap::COL_PACKAGE_ID, PackageDependancyArtifactTableMap::COL_NAME, PackageDependancyArtifactTableMap::COL_CHECKSUM, PackageDependancyArtifactTableMap::COL_ARTIFACT_TYPE_ID, PackageDependancyArtifactTableMap::COL_ARTIFACT_PATH, PackageDependancyArtifactTableMap::COL_VERSION, ),
+        self::TYPE_FIELDNAME     => array('id', 'package_id', 'name', 'checksum', 'artifact_type_id', 'artifact_path', 'version', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -127,11 +132,11 @@ class PackageDependancyArtifactTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'PackageId' => 1, 'PackageVersionId' => 2, 'Checksum' => 3, 'ArtifactTypeId' => 4, 'ArtifactPath' => 5, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'packageId' => 1, 'packageVersionId' => 2, 'checksum' => 3, 'artifactTypeId' => 4, 'artifactPath' => 5, ),
-        self::TYPE_COLNAME       => array(PackageDependancyArtifactTableMap::COL_ID => 0, PackageDependancyArtifactTableMap::COL_PACKAGE_ID => 1, PackageDependancyArtifactTableMap::COL_PACKAGE_VERSION_ID => 2, PackageDependancyArtifactTableMap::COL_CHECKSUM => 3, PackageDependancyArtifactTableMap::COL_ARTIFACT_TYPE_ID => 4, PackageDependancyArtifactTableMap::COL_ARTIFACT_PATH => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'package_id' => 1, 'package_version_id' => 2, 'checksum' => 3, 'artifact_type_id' => 4, 'artifact_path' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'PackageId' => 1, 'Name' => 2, 'Checksum' => 3, 'ArtifactTypeId' => 4, 'ArtifactPath' => 5, 'Version' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'packageId' => 1, 'name' => 2, 'checksum' => 3, 'artifactTypeId' => 4, 'artifactPath' => 5, 'version' => 6, ),
+        self::TYPE_COLNAME       => array(PackageDependancyArtifactTableMap::COL_ID => 0, PackageDependancyArtifactTableMap::COL_PACKAGE_ID => 1, PackageDependancyArtifactTableMap::COL_NAME => 2, PackageDependancyArtifactTableMap::COL_CHECKSUM => 3, PackageDependancyArtifactTableMap::COL_ARTIFACT_TYPE_ID => 4, PackageDependancyArtifactTableMap::COL_ARTIFACT_PATH => 5, PackageDependancyArtifactTableMap::COL_VERSION => 6, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'package_id' => 1, 'name' => 2, 'checksum' => 3, 'artifact_type_id' => 4, 'artifact_path' => 5, 'version' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -152,11 +157,12 @@ class PackageDependancyArtifactTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('package_id', 'PackageId', 'INTEGER', false, null, null);
-        $this->addColumn('package_version_id', 'PackageVersionId', 'INTEGER', false, null, null);
-        $this->addColumn('checksum', 'Checksum', 'VARCHAR', false, 50, null);
-        $this->addColumn('artifact_type_id', 'ArtifactTypeId', 'INTEGER', false, null, null);
-        $this->addColumn('artifact_path', 'ArtifactPath', 'VARCHAR', false, 50, null);
+        $this->addForeignKey('package_id', 'PackageId', 'INTEGER', 'package', 'id', true, null, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
+        $this->addColumn('checksum', 'Checksum', 'VARCHAR', true, 50, null);
+        $this->addForeignKey('artifact_type_id', 'ArtifactTypeId', 'INTEGER', 'artifact_type', 'id', true, null, null);
+        $this->addColumn('artifact_path', 'ArtifactPath', 'VARCHAR', true, 150, null);
+        $this->addColumn('version', 'Version', 'INTEGER', false, null, 0);
     } // initialize()
 
     /**
@@ -164,7 +170,50 @@ class PackageDependancyArtifactTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Package', '\\Packagerator\\Model\\Package', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':package_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('ArtifactType', '\\Packagerator\\Model\\ArtifactType', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':artifact_type_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('PackageDependancyArtifactVersion', '\\Packagerator\\Model\\PackageDependancyArtifactVersion', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':id',
+    1 => ':id',
+  ),
+), 'CASCADE', null, 'PackageDependancyArtifactVersions', false);
     } // buildRelations()
+
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return array(
+            'versionable' => array('version_column' => 'version', 'version_table' => '', 'log_created_at' => 'false', 'log_created_by' => 'false', 'log_comment' => 'false', 'version_created_at_column' => 'version_created_at', 'version_created_by_column' => 'version_created_by', 'version_comment_column' => 'version_comment', 'indices' => 'false', ),
+        );
+    } // getBehaviors()
+    /**
+     * Method to invalidate the instance pool of all tables related to package_dependancy_artifact     * by a foreign key with ON DELETE CASCADE
+     */
+    public static function clearRelatedInstancePool()
+    {
+        // Invalidate objects in related instance pools,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        PackageDependancyArtifactVersionTableMap::clearInstancePool();
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -309,17 +358,19 @@ class PackageDependancyArtifactTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(PackageDependancyArtifactTableMap::COL_ID);
             $criteria->addSelectColumn(PackageDependancyArtifactTableMap::COL_PACKAGE_ID);
-            $criteria->addSelectColumn(PackageDependancyArtifactTableMap::COL_PACKAGE_VERSION_ID);
+            $criteria->addSelectColumn(PackageDependancyArtifactTableMap::COL_NAME);
             $criteria->addSelectColumn(PackageDependancyArtifactTableMap::COL_CHECKSUM);
             $criteria->addSelectColumn(PackageDependancyArtifactTableMap::COL_ARTIFACT_TYPE_ID);
             $criteria->addSelectColumn(PackageDependancyArtifactTableMap::COL_ARTIFACT_PATH);
+            $criteria->addSelectColumn(PackageDependancyArtifactTableMap::COL_VERSION);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.package_id');
-            $criteria->addSelectColumn($alias . '.package_version_id');
+            $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.checksum');
             $criteria->addSelectColumn($alias . '.artifact_type_id');
             $criteria->addSelectColumn($alias . '.artifact_path');
+            $criteria->addSelectColumn($alias . '.version');
         }
     }
 

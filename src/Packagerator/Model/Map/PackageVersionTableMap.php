@@ -59,7 +59,7 @@ class PackageVersionTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class PackageVersionTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /**
      * the column name for the id field
@@ -97,6 +97,26 @@ class PackageVersionTableMap extends TableMap
     const COL_PACKAGE_DEPENDANCY_VERSIONS = 'package_version.package_dependancy_versions';
 
     /**
+     * the column name for the package_dependancy_artifact_ids field
+     */
+    const COL_PACKAGE_DEPENDANCY_ARTIFACT_IDS = 'package_version.package_dependancy_artifact_ids';
+
+    /**
+     * the column name for the package_dependancy_artifact_versions field
+     */
+    const COL_PACKAGE_DEPENDANCY_ARTIFACT_VERSIONS = 'package_version.package_dependancy_artifact_versions';
+
+    /**
+     * the column name for the package_step_ids field
+     */
+    const COL_PACKAGE_STEP_IDS = 'package_version.package_step_ids';
+
+    /**
+     * the column name for the package_step_versions field
+     */
+    const COL_PACKAGE_STEP_VERSIONS = 'package_version.package_step_versions';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -108,11 +128,11 @@ class PackageVersionTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'Version', 'PackageDependancyIds', 'PackageDependancyVersions', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'version', 'packageDependancyIds', 'packageDependancyVersions', ),
-        self::TYPE_COLNAME       => array(PackageVersionTableMap::COL_ID, PackageVersionTableMap::COL_NAME, PackageVersionTableMap::COL_VERSION, PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_IDS, PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_VERSIONS, ),
-        self::TYPE_FIELDNAME     => array('id', 'name', 'version', 'package_dependancy_ids', 'package_dependancy_versions', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'Version', 'PackageDependancyIds', 'PackageDependancyVersions', 'PackageDependancyArtifactIds', 'PackageDependancyArtifactVersions', 'PackageStepIds', 'PackageStepVersions', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'version', 'packageDependancyIds', 'packageDependancyVersions', 'packageDependancyArtifactIds', 'packageDependancyArtifactVersions', 'packageStepIds', 'packageStepVersions', ),
+        self::TYPE_COLNAME       => array(PackageVersionTableMap::COL_ID, PackageVersionTableMap::COL_NAME, PackageVersionTableMap::COL_VERSION, PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_IDS, PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_VERSIONS, PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_ARTIFACT_IDS, PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_ARTIFACT_VERSIONS, PackageVersionTableMap::COL_PACKAGE_STEP_IDS, PackageVersionTableMap::COL_PACKAGE_STEP_VERSIONS, ),
+        self::TYPE_FIELDNAME     => array('id', 'name', 'version', 'package_dependancy_ids', 'package_dependancy_versions', 'package_dependancy_artifact_ids', 'package_dependancy_artifact_versions', 'package_step_ids', 'package_step_versions', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -122,11 +142,11 @@ class PackageVersionTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Version' => 2, 'PackageDependancyIds' => 3, 'PackageDependancyVersions' => 4, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'version' => 2, 'packageDependancyIds' => 3, 'packageDependancyVersions' => 4, ),
-        self::TYPE_COLNAME       => array(PackageVersionTableMap::COL_ID => 0, PackageVersionTableMap::COL_NAME => 1, PackageVersionTableMap::COL_VERSION => 2, PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_IDS => 3, PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_VERSIONS => 4, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'version' => 2, 'package_dependancy_ids' => 3, 'package_dependancy_versions' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Version' => 2, 'PackageDependancyIds' => 3, 'PackageDependancyVersions' => 4, 'PackageDependancyArtifactIds' => 5, 'PackageDependancyArtifactVersions' => 6, 'PackageStepIds' => 7, 'PackageStepVersions' => 8, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'version' => 2, 'packageDependancyIds' => 3, 'packageDependancyVersions' => 4, 'packageDependancyArtifactIds' => 5, 'packageDependancyArtifactVersions' => 6, 'packageStepIds' => 7, 'packageStepVersions' => 8, ),
+        self::TYPE_COLNAME       => array(PackageVersionTableMap::COL_ID => 0, PackageVersionTableMap::COL_NAME => 1, PackageVersionTableMap::COL_VERSION => 2, PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_IDS => 3, PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_VERSIONS => 4, PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_ARTIFACT_IDS => 5, PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_ARTIFACT_VERSIONS => 6, PackageVersionTableMap::COL_PACKAGE_STEP_IDS => 7, PackageVersionTableMap::COL_PACKAGE_STEP_VERSIONS => 8, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'version' => 2, 'package_dependancy_ids' => 3, 'package_dependancy_versions' => 4, 'package_dependancy_artifact_ids' => 5, 'package_dependancy_artifact_versions' => 6, 'package_step_ids' => 7, 'package_step_versions' => 8, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -147,10 +167,14 @@ class PackageVersionTableMap extends TableMap
         $this->setUseIdGenerator(false);
         // columns
         $this->addForeignPrimaryKey('id', 'Id', 'INTEGER' , 'package', 'id', true, null, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', false, 50, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
         $this->addPrimaryKey('version', 'Version', 'INTEGER', true, null, 0);
         $this->addColumn('package_dependancy_ids', 'PackageDependancyIds', 'ARRAY', false, null, null);
         $this->addColumn('package_dependancy_versions', 'PackageDependancyVersions', 'ARRAY', false, null, null);
+        $this->addColumn('package_dependancy_artifact_ids', 'PackageDependancyArtifactIds', 'ARRAY', false, null, null);
+        $this->addColumn('package_dependancy_artifact_versions', 'PackageDependancyArtifactVersions', 'ARRAY', false, null, null);
+        $this->addColumn('package_step_ids', 'PackageStepIds', 'ARRAY', false, null, null);
+        $this->addColumn('package_step_versions', 'PackageStepVersions', 'ARRAY', false, null, null);
     } // initialize()
 
     /**
@@ -375,12 +399,20 @@ class PackageVersionTableMap extends TableMap
             $criteria->addSelectColumn(PackageVersionTableMap::COL_VERSION);
             $criteria->addSelectColumn(PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_IDS);
             $criteria->addSelectColumn(PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_VERSIONS);
+            $criteria->addSelectColumn(PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_ARTIFACT_IDS);
+            $criteria->addSelectColumn(PackageVersionTableMap::COL_PACKAGE_DEPENDANCY_ARTIFACT_VERSIONS);
+            $criteria->addSelectColumn(PackageVersionTableMap::COL_PACKAGE_STEP_IDS);
+            $criteria->addSelectColumn(PackageVersionTableMap::COL_PACKAGE_STEP_VERSIONS);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.version');
             $criteria->addSelectColumn($alias . '.package_dependancy_ids');
             $criteria->addSelectColumn($alias . '.package_dependancy_versions');
+            $criteria->addSelectColumn($alias . '.package_dependancy_artifact_ids');
+            $criteria->addSelectColumn($alias . '.package_dependancy_artifact_versions');
+            $criteria->addSelectColumn($alias . '.package_step_ids');
+            $criteria->addSelectColumn($alias . '.package_step_versions');
         }
     }
 

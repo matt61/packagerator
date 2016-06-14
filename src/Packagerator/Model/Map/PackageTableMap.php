@@ -137,7 +137,7 @@ class PackageTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', false, 50, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
         $this->addColumn('version', 'Version', 'INTEGER', false, null, 0);
     } // initialize()
 
@@ -160,6 +160,27 @@ class PackageTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'PackageDependanciesRelatedByRequiredPackageId', false);
+        $this->addRelation('PackageDependancyArtifact', '\\Packagerator\\Model\\PackageDependancyArtifact', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':package_id',
+    1 => ':id',
+  ),
+), null, null, 'PackageDependancyArtifacts', false);
+        $this->addRelation('Step', '\\Packagerator\\Model\\PackageStep', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':package_id',
+    1 => ':id',
+  ),
+), null, null, 'Steps', false);
+        $this->addRelation('PackageStepRelatedByRelatedPackageId', '\\Packagerator\\Model\\PackageStep', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':related_package_id',
+    1 => ':id',
+  ),
+), null, null, 'PackageStepsRelatedByRelatedPackageId', false);
         $this->addRelation('PackageVersion', '\\Packagerator\\Model\\PackageVersion', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
