@@ -2,10 +2,10 @@
 
 namespace Packagerator\Model;
 
-use Packagerator\Model\Base\PackageStepPropertyQuery as BasePackageStepPropertyQuery;
+use Packagerator\Model\Base\PropertySetVersion as BasePropertySetVersion;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'package_step_property' table.
+ * Skeleton subclass for representing a row from the 'property_set_version' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use Packagerator\Model\Base\PackageStepPropertyQuery as BasePackageStepPropertyQ
  * long as it does not already exist in the output directory.
  *
  */
-class PackageStepPropertyQuery extends BasePackageStepPropertyQuery
+class PropertySetVersion extends BasePropertySetVersion
 {
 
 }

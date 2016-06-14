@@ -90,17 +90,17 @@
             <reference local="property_type_id" foreign="id"/>
         </foreign-key>
     </table>
-    <table name="package_step_property">
+    <table name="package_property">
         <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="package_step_id" type="INTEGER" required="true"/>
+        <column name="package_id" type="INTEGER" required="true"/>
         <column name="property_id" type="VARCHAR" size="50" required="true"/>
         <unique>
-            <unique-column name="package_step_id"/>
+            <unique-column name="package_id"/>
             <unique-column name="version"/>
             <unique-column name="property_id"/>
         </unique>
-        <foreign-key foreignTable="package_step">
-            <reference local="package_step_id" foreign="id"/>
+        <foreign-key foreignTable="package">
+            <reference local="package_id" foreign="id"/>
         </foreign-key>
         <foreign-key foreignTable="property" onDelete="restrict">
             <reference local="property_id" foreign="id"/>
@@ -246,7 +246,7 @@
         <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
         <column name="name" type="VARCHAR" size="50" required="true"/>
         <column name="ip" type="VARCHAR" size="50" required="true"/>
-        <column name="target_group_id" type="INTEGER" required="true"/>
+        <column name="target_group_id" type="INTEGER" required="false"/>
         <unique>
             <unique-column name="name"/>
             <unique-column name="version"/>
@@ -267,16 +267,16 @@
             <unique-column name="name"/>
         </unique>
     </table>
-    <table name="target_group_permission">
+    <table name="target_permission">
         <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="target_group_id" type="INTEGER" required="true"/>
+        <column name="target_id" type="INTEGER" required="true"/>
         <column name="user_group_id" type="INTEGER" required="true"/>
         <unique>
-            <unique-column name="target_group_id"/>
+            <unique-column name="target_id"/>
             <unique-column name="user_group_id"/>
         </unique>
-        <foreign-key foreignTable="target_group">
-            <reference local="target_group_id" foreign="id"/>
+        <foreign-key foreignTable="target">
+            <reference local="target_id" foreign="id"/>
         </foreign-key>
         <foreign-key foreignTable="user_group">
             <reference local="user_group_id" foreign="id"/>
@@ -286,6 +286,7 @@
         <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
         <column name="target_id" required="true" type="INTEGER"/>
         <column name="package_id" required="true" type="INTEGER"/>
+        <column name="property_set_id" required="true" type="INTEGER"/>
         <column name="target_package_status_id" required="true" type="INTEGER"/>
         <behavior name="timestampable" />
         <foreign-key foreignTable="target">
@@ -293,6 +294,9 @@
         </foreign-key>
         <foreign-key foreignTable="package">
             <reference local="package_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="property_set">
+            <reference local="property_set_id" foreign="id"/>
         </foreign-key>
         <foreign-key foreignTable="target_package_status">
             <reference local="target_package_status_id" foreign="id"/>

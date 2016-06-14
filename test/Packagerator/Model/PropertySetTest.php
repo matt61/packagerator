@@ -26,6 +26,6 @@ class PropertySetTest extends \PHPUnit_Framework_TestCase
         $propertyValue->setValue('http://test2.com');
 
         $packageSet->save();
-        $this->assertEquals(2, $packageSet->getVersion());
+        $this->assertEquals(3, $packageSet->getVersion());
     }
 }

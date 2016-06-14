@@ -2,10 +2,10 @@
 
 namespace Packagerator\Model;
 
-use Packagerator\Model\Base\TargetGroupMembership as BaseTargetGroupMembership;
+use Packagerator\Model\Base\TargetVersion as BaseTargetVersion;
 
 /**
- * Skeleton subclass for representing a row from the 'target_group_membership' table.
+ * Skeleton subclass for representing a row from the 'target_version' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use Packagerator\Model\Base\TargetGroupMembership as BaseTargetGroupMembership;
  * long as it does not already exist in the output directory.
  *
  */
-class TargetGroupMembership extends BaseTargetGroupMembership
+class TargetVersion extends BaseTargetVersion
 {
 
 }

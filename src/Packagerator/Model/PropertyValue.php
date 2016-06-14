@@ -2,10 +2,10 @@
 
 namespace Packagerator\Model;
 
-use Packagerator\Model\Base\PropertyGroupQuery as BasePropertyGroupQuery;
+use Packagerator\Model\Base\PropertyValue as BasePropertyValue;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'property_group' table.
+ * Skeleton subclass for representing a row from the 'property_value' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use Packagerator\Model\Base\PropertyGroupQuery as BasePropertyGroupQuery;
  * long as it does not already exist in the output directory.
  *
  */
-class PropertyGroupQuery extends BasePropertyGroupQuery
+class PropertyValue extends BasePropertyValue
 {
 
 }

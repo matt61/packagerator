@@ -147,13 +147,6 @@ class TargetGroupTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'Targets', false);
-        $this->addRelation('TargetGroupPermission', '\\Packagerator\\Model\\TargetGroupPermission', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':target_group_id',
-    1 => ':id',
-  ),
-), null, null, 'TargetGroupPermissions', false);
     } // buildRelations()
 
     /**

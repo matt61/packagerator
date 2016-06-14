@@ -2,10 +2,10 @@
 
 namespace Packagerator\Model;
 
-use Packagerator\Model\Base\PropertyGroupRole as BasePropertyGroupRole;
+use Packagerator\Model\Base\PropertyValueVersion as BasePropertyValueVersion;
 
 /**
- * Skeleton subclass for representing a row from the 'property_group_role' table.
+ * Skeleton subclass for representing a row from the 'property_value_version' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use Packagerator\Model\Base\PropertyGroupRole as BasePropertyGroupRole;
  * long as it does not already exist in the output directory.
  *
  */
-class PropertyGroupRole extends BasePropertyGroupRole
+class PropertyValueVersion extends BasePropertyValueVersion
 {
 
 }

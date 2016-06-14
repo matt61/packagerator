@@ -2,10 +2,10 @@
 
 namespace Packagerator\Model;
 
-use Packagerator\Model\Base\PackageStepPropertyVersion as BasePackageStepPropertyVersion;
+use Packagerator\Model\Base\PackageRoleVersion as BasePackageRoleVersion;
 
 /**
- * Skeleton subclass for representing a row from the 'package_step_property_version' table.
+ * Skeleton subclass for representing a row from the 'package_role_version' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use Packagerator\Model\Base\PackageStepPropertyVersion as BasePackageStepPropert
  * long as it does not already exist in the output directory.
  *
  */
-class PackageStepPropertyVersion extends BasePackageStepPropertyVersion
+class PackageRoleVersion extends BasePackageRoleVersion
 {
 
 }

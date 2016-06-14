@@ -167,6 +167,13 @@ class PackageTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'PackageDependancyArtifacts', false);
+        $this->addRelation('PackageProperty', '\\Packagerator\\Model\\PackageProperty', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':package_id',
+    1 => ':id',
+  ),
+), null, null, 'PackageProperties', false);
         $this->addRelation('PackagePermission', '\\Packagerator\\Model\\PackagePermission', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

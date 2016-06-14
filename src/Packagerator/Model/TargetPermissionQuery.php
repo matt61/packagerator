@@ -2,10 +2,10 @@
 
 namespace Packagerator\Model;
 
-use Packagerator\Model\Base\PropertyGroup as BasePropertyGroup;
+use Packagerator\Model\Base\TargetPermissionQuery as BaseTargetPermissionQuery;
 
 /**
- * Skeleton subclass for representing a row from the 'property_group' table.
+ * Skeleton subclass for performing query and update operations on the 'target_permission' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use Packagerator\Model\Base\PropertyGroup as BasePropertyGroup;
  * long as it does not already exist in the output directory.
  *
  */
-class PropertyGroup extends BasePropertyGroup
+class TargetPermissionQuery extends BaseTargetPermissionQuery
 {
 
 }

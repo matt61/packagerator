@@ -154,13 +154,13 @@ class UserGroupTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'PropertySetPermissions', false);
-        $this->addRelation('TargetGroupPermission', '\\Packagerator\\Model\\TargetGroupPermission', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('TargetPermission', '\\Packagerator\\Model\\TargetPermission', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':user_group_id',
     1 => ':id',
   ),
-), null, null, 'TargetGroupPermissions', false);
+), null, null, 'TargetPermissions', false);
         $this->addRelation('UserGroupMembership', '\\Packagerator\\Model\\UserGroupMembership', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

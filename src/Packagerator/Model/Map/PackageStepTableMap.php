@@ -205,13 +205,6 @@ class PackageStepTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, null, false);
-        $this->addRelation('PackageStepProperty', '\\Packagerator\\Model\\PackageStepProperty', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':package_step_id',
-    1 => ':id',
-  ),
-), null, null, 'PackageStepProperties', false);
         $this->addRelation('PackageStepExecution', '\\Packagerator\\Model\\PackageStepExecution', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

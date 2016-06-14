@@ -2,10 +2,10 @@
 
 namespace Packagerator\Model;
 
-use Packagerator\Model\Base\PropertyGroupPermission as BasePropertyGroupPermission;
+use Packagerator\Model\Base\PackageProperty as BasePackageProperty;
 
 /**
- * Skeleton subclass for representing a row from the 'property_group_permission' table.
+ * Skeleton subclass for representing a row from the 'package_property' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use Packagerator\Model\Base\PropertyGroupPermission as BasePropertyGroupPermissi
  * long as it does not already exist in the output directory.
  *
  */
-class PropertyGroupPermission extends BasePropertyGroupPermission
+class PackageProperty extends BasePackageProperty
 {
 
 }

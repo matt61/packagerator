@@ -2,10 +2,10 @@
 
 namespace Packagerator\Model;
 
-use Packagerator\Model\Base\PackageStepProperty as BasePackageStepProperty;
+use Packagerator\Model\Base\TargetPermission as BaseTargetPermission;
 
 /**
- * Skeleton subclass for representing a row from the 'package_step_property' table.
+ * Skeleton subclass for representing a row from the 'target_permission' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use Packagerator\Model\Base\PackageStepProperty as BasePackageStepProperty;
  * long as it does not already exist in the output directory.
  *
  */
-class PackageStepProperty extends BasePackageStepProperty
+class TargetPermission extends BaseTargetPermission
 {
 
 }

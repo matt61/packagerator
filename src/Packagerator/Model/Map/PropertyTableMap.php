@@ -153,13 +153,13 @@ class PropertyTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, null, false);
-        $this->addRelation('PackageStepProperty', '\\Packagerator\\Model\\PackageStepProperty', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('PackageProperty', '\\Packagerator\\Model\\PackageProperty', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':property_id',
     1 => ':id',
   ),
-), 'RESTRICT', null, 'PackageStepProperties', false);
+), 'RESTRICT', null, 'PackageProperties', false);
         $this->addRelation('PropertyValue', '\\Packagerator\\Model\\PropertyValue', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

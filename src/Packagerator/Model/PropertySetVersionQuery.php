@@ -2,10 +2,10 @@
 
 namespace Packagerator\Model;
 
-use Packagerator\Model\Base\PropertyGroupRoleQuery as BasePropertyGroupRoleQuery;
+use Packagerator\Model\Base\PropertySetVersionQuery as BasePropertySetVersionQuery;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'property_group_role' table.
+ * Skeleton subclass for performing query and update operations on the 'property_set_version' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use Packagerator\Model\Base\PropertyGroupRoleQuery as BasePropertyGroupRoleQuery
  * long as it does not already exist in the output directory.
  *
  */
-class PropertyGroupRoleQuery extends BasePropertyGroupRoleQuery
+class PropertySetVersionQuery extends BasePropertySetVersionQuery
 {
 
 }

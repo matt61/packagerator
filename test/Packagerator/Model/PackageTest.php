@@ -25,9 +25,9 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $step->setName('Install nginx');
         $step->setPackageStepTypeId(1);
 
-        $requiredProperty = new PackageStepProperty();
+        $requiredProperty = new PackageProperty();
         $requiredProperty->setPropertyId('AUTH_API_URL');
-        $step->addPackageStepProperty($requiredProperty);
+        $package->addPackageProperty($requiredProperty);
 
         $execution = new PackageStepExecution();
         $execution->setInput("echo 'test");
@@ -51,5 +51,27 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $package->save();
 
         $this->assertEquals(2, $package->getVersion());
+
+        $target = new Target();
+        $target->setName(uniqid());
+        $target->setIp(uniqid());
+        $target->save();
+
+        $propertySet = new PropertySet();
+        $propertySet->setName(uniqid());
+        $propertyValue = new PropertyValue();
+        $propertyValue->setPropertyId('AUTH_API_URL');
+        $propertyValue->setValue(1);
+        $propertySet->addPropertyValue($propertyValue);
+        $propertySet->save();
+
+        $deployment = new TargetPackageDeployment();
+        $deployment->setPackage($package);
+        $deployment->setPropertySet($propertySet);
+        $deployment->setTargetPackageStatusId(1);
+
+        $target->addTargetPackageDeployment($deployment);
+        $target->save();
+
     }
 }

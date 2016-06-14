@@ -149,7 +149,7 @@ class TargetTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
         $this->addColumn('ip', 'Ip', 'VARCHAR', true, 50, null);
-        $this->addForeignKey('target_group_id', 'TargetGroupId', 'INTEGER', 'target_group', 'id', true, null, null);
+        $this->addForeignKey('target_group_id', 'TargetGroupId', 'INTEGER', 'target_group', 'id', false, null, null);
         $this->addColumn('version', 'Version', 'INTEGER', false, null, 0);
     } // initialize()
 
@@ -165,6 +165,13 @@ class TargetTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, null, false);
+        $this->addRelation('TargetPermission', '\\Packagerator\\Model\\TargetPermission', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':target_id',
+    1 => ':id',
+  ),
+), null, null, 'TargetPermissions', false);
         $this->addRelation('TargetPackageDeployment', '\\Packagerator\\Model\\TargetPackageDeployment', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
