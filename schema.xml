@@ -5,13 +5,17 @@
     </vendor>
     <table name="package" idMethod="native">
         <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="name" type="VARCHAR" size="50"/>
+        <column name="name" type="VARCHAR" size="50" required="true"/>
+        <unique>
+            <unique-column name="name"/>
+            <unique-column name="version"/>
+        </unique>
         <behavior name="versionable" />
     </table>
-    <table name="package_dependancy" idMethod="native">
+    <table name="package_dependancy">
         <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="package_id" type="INTEGER"/>
-        <column name="required_package_id" type="INTEGER"/>
+        <column name="package_id" type="INTEGER" required="true"/>
+        <column name="required_package_id" type="INTEGER" required="true"/>
         <foreign-key foreignTable="package">
             <reference local="package_id" foreign="id"/>
         </foreign-key>
@@ -20,13 +24,26 @@
         </foreign-key>
         <behavior name="versionable" />
     </table>
+    <table name="artifact_type">
+        <column name="id" type="INTEGER" primaryKey="true" required="true"/>
+        <column name="name" type="VARCHAR" size="50" required="true"/>
+        <unique>
+            <unique-column name="name"/>
+        </unique>
+    </table>
     <table name="package_dependancy_artifact" idMethod="native" phpName="PackageDependancyArtifact">
-        <column name="id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="package_id" type="INTEGER"/>
-        <column name="package_version_id" type="INTEGER"/>
-        <column name="checksum" phpName="Checksum" type="VARCHAR" size="50"/>
-        <column name="artifact_type_id" phpName="ArtifactTypeId" type="INTEGER"/>
-        <column name="artifact_path" phpName="ArtifactPath" type="VARCHAR" size="50"/>
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="package_id" type="INTEGER" required="true"/>
+        <column name="checksum" type="VARCHAR" size="50" required="true"/>
+        <column name="artifact_type_id" type="INTEGER" required="true"/>
+        <column name="artifact_path" type="VARCHAR" size="150" required="true"/>
+        <foreign-key foreignTable="package">
+            <reference local="package_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="artifact_type">
+            <reference local="artifact_type_id" foreign="id"/>
+        </foreign-key>
+        <behavior name="versionable" />
     </table>
     <table name="package_dependancy_property_type" idMethod="native" phpName="PackageDependancyPropertyType">
         <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
@@ -44,33 +61,64 @@
         <column name="package_id" phpName="PackageId" type="INTEGER"/>
         <column name="role_id" phpName="RoleId" type="INTEGER"/>
     </table>
-    <table name="package_step" idMethod="native" phpName="PackageStep">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="package_id" phpName="PackageId" type="INTEGER"/>
-        <column name="sequence_id" phpName="SequenceId" type="INTEGER"/>
-        <column name="version_id" phpName="VersionId" type="INTEGER"/>
-        <column name="step_type" phpName="StepType" type="CHAR"
-                sqlType="enum('install','uninstall','validate','upgrade','downgrade')"/>
-        <column name="related_package_id" phpName="RelatedPackageId" type="INTEGER"/>
+    <table name="package_step">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="package_id" type="INTEGER" required="true"/>
+        <column name="name" type="VARCHAR" size="50" required="true"/>
+        <column name="package_step_type_id" type="INTEGER" required="true"/>
+        <column name="related_package_id" type="INTEGER"/>
+        <behavior name="versionable" />
+        <behavior name="sortable">
+            <parameter name="use_scope" value="true" />
+            <parameter name="scope_column" value="package_id" />
+        </behavior>
+        <unique>
+            <unique-column name="package_id"/>
+            <unique-column name="sortable_rank"/>
+            <unique-column name="version"/>
+        </unique>
+        <unique>
+            <unique-column name="package_id"/>
+            <unique-column name="name"/>
+            <unique-column name="version"/>
+        </unique>
+        <foreign-key foreignTable="package" phpName="Package" refPhpName="Step">
+            <reference local="package_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="package_step_type">
+            <reference local="package_step_type_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="package" phpName="RelatedPackage">
+            <reference local="related_package_id" foreign="id"/>
+        </foreign-key>
     </table>
-    <table name="package_step_execution" idMethod="native" phpName="PackageStepExecution">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
-                required="true"/>
-        <column name="package_step_id" phpName="PackageStepId" type="INTEGER"/>
-        <column name="version_id" phpName="VersionId" type="INTEGER"/>
-        <column name="sequence_id" phpName="SequenceId" type="INTEGER"/>
-        <column name="input" phpName="Input" type="VARCHAR" size="50"/>
-        <column name="output_code" phpName="OutputCode" type="INTEGER"/>
-        <column name="output_pattern" phpName="OutputPattern" type="VARCHAR" size="50"/>
+    <table name="package_step_type">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="name" type="VARCHAR" size="250" required="true"/>
+        <unique>
+            <unique-column name="name"/>
+        </unique>
     </table>
-    <!--
-    <table name="package_version" idMethod="native" phpName="PackageVersion">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="user_id" phpName="UserId" type="INTEGER"/>
-        <column name="created_at" phpName="CreatedAt" type="TIMESTAMP"/>
-        <column name="description" phpName="Description" type="VARCHAR" size="50"/>
+    <table name="package_step_execution">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="package_step_id" type="INTEGER" required="true"/>
+        <column name="input" type="VARCHAR" size="250" required="true"/>
+        <column name="output_code" type="INTEGER"/>
+        <column name="output_pattern" type="VARCHAR" size="250"/>
+        <foreign-key foreignTable="package_step">
+            <reference local="package_step_id" foreign="id"/>
+        </foreign-key>
+        <behavior name="sortable">
+            <parameter name="use_scope" value="true" />
+            <parameter name="scope_column" value="package_id" />
+        </behavior>
+        <unique>
+            <unique-column name="package_step_id"/>
+            <unique-column name="sortable_rank"/>
+            <unique-column name="version"/>
+        </unique>
+        <behavior name="versionable"/>
     </table>
-    -->
     <table name="property" idMethod="native" phpName="Property">
         <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
                 required="true"/>
