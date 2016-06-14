@@ -26,7 +26,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $step->setPackageStepTypeId(1);
 
         $requiredProperty = new PackageStepProperty();
-        $requiredProperty->setPropertyTypeId('AUTH_API_URL');
+        $requiredProperty->setPropertyId('AUTH_API_URL');
         $step->addPackageStepProperty($requiredProperty);
 
         $execution = new PackageStepExecution();

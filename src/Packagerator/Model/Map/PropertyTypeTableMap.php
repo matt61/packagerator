@@ -129,10 +129,10 @@ class PropertyTypeTableMap extends TableMap
         $this->setIdentifierQuoting(false);
         $this->setClassName('\\Packagerator\\Model\\PropertyType');
         $this->setPackage('Packagerator.Model');
-        $this->setUseIdGenerator(false);
+        $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'VARCHAR', true, 50, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', false, 50, null);
+        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
     } // initialize()
 
     /**
@@ -140,13 +140,13 @@ class PropertyTypeTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('PackageStepProperty', '\\Packagerator\\Model\\PackageStepProperty', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('Property', '\\Packagerator\\Model\\Property', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':property_type_id',
     1 => ':id',
   ),
-), 'RESTRICT', null, 'PackageStepProperties', false);
+), null, null, 'Properties', false);
     } // buildRelations()
 
     /**
@@ -186,7 +186,7 @@ class PropertyTypeTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        return (string) $row[
+        return (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
                 : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
@@ -392,6 +392,10 @@ class PropertyTypeTableMap extends TableMap
             $criteria = clone $criteria; // rename for clarity
         } else {
             $criteria = $criteria->buildCriteria(); // build Criteria from PropertyType object
+        }
+
+        if ($criteria->containsKey(PropertyTypeTableMap::COL_ID) && $criteria->keyContainsValue(PropertyTypeTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.PropertyTypeTableMap::COL_ID.')');
         }
 
 

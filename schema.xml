@@ -25,7 +25,7 @@
         <behavior name="versionable" />
     </table>
     <table name="artifact_type">
-        <column name="id" type="INTEGER" primaryKey="true" required="true"/>
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
         <column name="name" type="VARCHAR" size="50" required="true"/>
         <unique>
             <unique-column name="name"/>
@@ -52,38 +52,71 @@
         <behavior name="versionable" />
     </table>
     <table name="property_type">
-        <column name="id" type="VARCHAR" size="50" primaryKey="true" required="true"/>
-        <column name="name" type="VARCHAR" size="50"/>
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="name" type="VARCHAR" size="50" required="true"/>
         <unique>
             <unique-column name="name"/>
         </unique>
     </table>
+    <table name="property">
+        <column name="id" type="VARCHAR" size="50" primaryKey="true" required="true"/>
+        <column name="name" type="VARCHAR" size="50" required="true"/>
+        <column name="property_type_id" type="INTEGER" required="true"/>
+        <unique>
+            <unique-column name="name"/>
+        </unique>
+        <foreign-key foreignTable="property_type">
+            <reference local="property_type_id" foreign="id"/>
+        </foreign-key>
+    </table>
     <table name="package_step_property">
         <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="package_step_id" type="INTEGER"/>
-        <column name="property_type_id" type="VARCHAR" size="50"/>
+        <column name="package_step_id" type="INTEGER" required="true"/>
+        <column name="property_id" type="VARCHAR" size="50" required="true"/>
         <unique>
             <unique-column name="package_step_id"/>
             <unique-column name="version"/>
-            <unique-column name="property_type_id"/>
+            <unique-column name="property_id"/>
         </unique>
         <foreign-key foreignTable="package_step">
             <reference local="package_step_id" foreign="id"/>
         </foreign-key>
-        <foreign-key foreignTable="property_type" onDelete="restrict">
-            <reference local="property_type_id" foreign="id"/>
+        <foreign-key foreignTable="property" onDelete="restrict">
+            <reference local="property_id" foreign="id"/>
         </foreign-key>
         <behavior name="versionable" />
     </table>
-    <table name="package_permission" idMethod="native" phpName="PackagePermission">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="package_id" phpName="PackageId" type="INTEGER"/>
-        <column name="user_group_id" phpName="UserGroupId" type="INTEGER"/>
+    <table name="package_permission">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="package_id" type="INTEGER" required="true"/>
+        <column name="user_group_id" type="INTEGER" required="true"/>
+        <unique>
+            <unique-column name="package_id"/>
+            <unique-column name="user_group_id"/>
+        </unique>
+        <foreign-key foreignTable="package">
+            <reference local="package_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="user_group">
+            <reference local="user_group_id" foreign="id"/>
+        </foreign-key>
     </table>
-    <table name="package_role" idMethod="native" phpName="PackageRole">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="package_id" phpName="PackageId" type="INTEGER"/>
-        <column name="role_id" phpName="RoleId" type="INTEGER"/>
+    <table name="package_role">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="package_id" type="INTEGER" required="true"/>
+        <column name="role_id" type="INTEGER" required="true"/>
+        <unique>
+            <unique-column name="package_id"/>
+            <unique-column name="version"/>
+            <unique-column name="role_id"/>
+        </unique>
+        <foreign-key foreignTable="package">
+            <reference local="package_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="role">
+            <reference local="role_id" foreign="id"/>
+        </foreign-key>
+        <behavior name="versionable" />
     </table>
     <table name="package_step">
         <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
@@ -143,48 +176,57 @@
         </unique>
         <behavior name="versionable"/>
     </table>
-    <table name="property" idMethod="native" phpName="Property">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="property_type_id" phpName="PropertyTypeId" type="INTEGER"/>
-        <column name="value" phpName="Value" type="VARCHAR" size="50"/>
-        <column name="version_id" phpName="VersionId" type="INTEGER"/>
-        <column name="property_group_id" phpName="PropertyGroupId" type="INTEGER"/>
+    <table name="property_set">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="name" type="VARCHAR" size="50"/>
+        <behavior name="versionable" />
     </table>
-    <table name="property_group" idMethod="native" phpName="PropertyGroup">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
-                required="true"/>
-        <column name="name" phpName="Name" type="VARCHAR" size="50"/>
-        <column name="version_id" phpName="VersionId" type="INTEGER"/>
+    <table name="property_value">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="property_id" type="VARCHAR" size="50"/>
+        <column name="value" type="VARCHAR" size="50"/>
+        <column name="property_set_id" type="INTEGER"/>
+        <foreign-key foreignTable="property">
+            <reference local="property_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="property_set">
+            <reference local="property_set_id" foreign="id"/>
+        </foreign-key>
+        <unique>
+            <unique-column name="property_id"/>
+            <unique-column name="property_set_id"/>
+            <unique-column name="version"/>
+        </unique>
+        <behavior name="versionable"/>
     </table>
-    <table name="property_group_permission" idMethod="native" phpName="PropertyGroupPermission">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
-                required="true"/>
-        <column name="property_group_id" phpName="PropertyGroupId" type="INTEGER"/>
-        <column name="user_group_id" phpName="UserGroupId" type="INTEGER"/>
+    <table name="property_set_permission">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="property_set_id" type="INTEGER" required="true"/>
+        <column name="user_group_id" type="INTEGER" required="true"/>
+        <unique>
+            <unique-column name="user_group_id"/>
+            <unique-column name="property_set_id"/>
+        </unique>
+        <foreign-key foreignTable="property_set">
+            <reference local="property_set_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="user_group">
+            <reference local="user_group_id" foreign="id"/>
+        </foreign-key>
     </table>
-    <table name="property_group_role" idMethod="native" phpName="PropertyGroupRole">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
-                required="true"/>
-        <column name="property_group_id" phpName="PropertyGroupId" type="INTEGER"/>
-        <column name="role_id" phpName="RoleId" type="INTEGER"/>
-        <vendor type="mysql">
-            <parameter name="Engine" value="InnoDB"/>
-        </vendor>
+    <table name="role">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="name" required="true" type="VARCHAR" size="50"/>
+        <unique>
+            <unique-column name="name"/>
+        </unique>
     </table>
-    <table name="role" idMethod="native" phpName="Role">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
-                required="true"/>
-        <vendor type="mysql">
-            <parameter name="Engine" value="InnoDB"/>
-        </vendor>
-    </table>
-    <table name="target" idMethod="native" phpName="Target">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
-                required="true"/>
-        <column name="name" phpName="Name" type="VARCHAR" size="50"/>
-        <vendor type="mysql">
-            <parameter name="Engine" value="InnoDB"/>
-        </vendor>
+    <table name="target">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="name" type="VARCHAR" size="50" required="true"/>
+        <unique>
+            <unique-column name="name"/>
+        </unique>
     </table>
     <table name="target_group" idMethod="native" phpName="TargetGroup">
         <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
@@ -229,29 +271,33 @@
             <parameter name="Engine" value="InnoDB"/>
         </vendor>
     </table>
-    <table name="user" idMethod="native" phpName="User">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
-                required="true"/>
-        <column name="email" phpName="Email" type="VARCHAR" size="11"/>
-        <vendor type="mysql">
-            <parameter name="Engine" value="InnoDB"/>
-        </vendor>
+    <table name="user">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="email" type="VARCHAR" size="25" required="true"/>
+        <unique>
+            <unique-column name="email"/>
+        </unique>
     </table>
-    <table name="user_group" idMethod="native" phpName="UserGroup">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
-                required="true"/>
-        <column name="name" phpName="Name" type="VARCHAR" size="50"/>
-        <vendor type="mysql">
-            <parameter name="Engine" value="InnoDB"/>
-        </vendor>
+    <table name="user_group">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="name" type="VARCHAR" size="50" required="true"/>
+        <unique>
+            <unique-column name="name"/>
+        </unique>
     </table>
-    <table name="user_group_membership" idMethod="native" phpName="UserGroupMembership">
-        <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true"
-                required="true"/>
-        <column name="user_group_id" phpName="UserGroupId" type="INTEGER"/>
-        <column name="user_id" phpName="UserId" type="INTEGER"/>
-        <vendor type="mysql">
-            <parameter name="Engine" value="InnoDB"/>
-        </vendor>
+    <table name="user_group_membership">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="user_group_id" type="INTEGER" required="true"/>
+        <column name="user_id" required="true" type="INTEGER"/>
+        <unique>
+            <unique-column name="user_group_id"/>
+            <unique-column name="user_id"/>
+        </unique>
+        <foreign-key foreignTable="user">
+            <reference local="user_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="user_group">
+            <reference local="user_group_id" foreign="id"/>
+        </foreign-key>
     </table>
 </database>
