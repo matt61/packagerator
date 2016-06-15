@@ -16,5 +16,8 @@ use Packagerator\Model\Base\Target as BaseTarget;
  */
 class Target extends BaseTarget
 {
+    public function deploy(Package $package, PropertySet $propertySet)
+    {
 
+    }
 }

@@ -154,6 +154,8 @@ class RoleTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'TargetRoles', false);
+        $this->addRelation('Package', '\\Packagerator\\Model\\Package', RelationMap::MANY_TO_MANY, array(), null, null, 'Packages');
+        $this->addRelation('Target', '\\Packagerator\\Model\\Target', RelationMap::MANY_TO_MANY, array(), null, null, 'Targets');
     } // buildRelations()
 
     /**

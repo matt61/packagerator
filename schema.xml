@@ -67,7 +67,6 @@
         </foreign-key>
         <unique>
             <unique-column name="name"/>
-            <unique-column name="version"/>
             <unique-column name="package_id"/>
         </unique>
         <behavior name="versionable" />
@@ -80,11 +79,12 @@
         </unique>
     </table>
     <table name="property">
-        <column name="id" type="VARCHAR" size="50" primaryKey="true" required="true"/>
-        <column name="name" type="VARCHAR" size="50" required="true"/>
+        <column name="id" type="INTEGER" primaryKey="true" required="true" autoIncrement="true"/>
+        <column name="identifier" type="VARCHAR" size="50" required="true"/>
+        <column name="description" type="VARCHAR" size="150" required="true"/>
         <column name="property_type_id" type="INTEGER" required="true"/>
         <unique>
-            <unique-column name="name"/>
+            <unique-column name="identifier"/>
         </unique>
         <foreign-key foreignTable="property_type">
             <reference local="property_type_id" foreign="id"/>
@@ -93,7 +93,7 @@
     <table name="package_property">
         <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
         <column name="package_id" type="INTEGER" required="true"/>
-        <column name="property_id" type="VARCHAR" size="50" required="true"/>
+        <column name="property_id" type="INTEGER" required="true"/>
         <unique>
             <unique-column name="package_id"/>
             <unique-column name="version"/>
@@ -107,14 +107,9 @@
         </foreign-key>
         <behavior name="versionable" />
     </table>
-    <table name="package_permission">
-        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="package_id" type="INTEGER" required="true"/>
-        <column name="user_group_id" type="INTEGER" required="true"/>
-        <unique>
-            <unique-column name="package_id"/>
-            <unique-column name="user_group_id"/>
-        </unique>
+    <table name="package_permission" isCrossRef="true">
+        <column name="package_id" type="INTEGER" required="true" primaryKey="true"/>
+        <column name="user_group_id" type="INTEGER" required="true" primaryKey="true"/>
         <foreign-key foreignTable="package">
             <reference local="package_id" foreign="id"/>
         </foreign-key>
@@ -122,22 +117,15 @@
             <reference local="user_group_id" foreign="id"/>
         </foreign-key>
     </table>
-    <table name="package_role">
-        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="package_id" type="INTEGER" required="true"/>
-        <column name="role_id" type="INTEGER" required="true"/>
-        <unique>
-            <unique-column name="package_id"/>
-            <unique-column name="version"/>
-            <unique-column name="role_id"/>
-        </unique>
+    <table name="package_role" isCrossRef="true">
+        <column name="package_id" type="INTEGER" required="true" primaryKey="true"/>
+        <column name="role_id" type="INTEGER" required="true" primaryKey="true"/>
         <foreign-key foreignTable="package">
             <reference local="package_id" foreign="id"/>
         </foreign-key>
         <foreign-key foreignTable="role">
             <reference local="role_id" foreign="id"/>
         </foreign-key>
-        <behavior name="versionable" />
     </table>
     <table name="package_step">
         <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
@@ -153,12 +141,10 @@
         <unique>
             <unique-column name="package_id"/>
             <unique-column name="sortable_rank"/>
-            <unique-column name="version"/>
         </unique>
         <unique>
             <unique-column name="package_id"/>
             <unique-column name="name"/>
-            <unique-column name="version"/>
         </unique>
         <foreign-key foreignTable="package" phpName="Package" refPhpName="Step">
             <reference local="package_id" foreign="id"/>
@@ -193,7 +179,6 @@
         <unique>
             <unique-column name="package_step_id"/>
             <unique-column name="sortable_rank"/>
-            <unique-column name="version"/>
         </unique>
         <behavior name="versionable"/>
     </table>
@@ -204,8 +189,8 @@
     </table>
     <table name="property_value">
         <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="property_id" type="VARCHAR" size="50"/>
-        <column name="value" type="VARCHAR" size="50"/>
+        <column name="property_id" type="INTEGER" required="true"/>
+        <column name="value" type="VARCHAR" size="50" required="true"/>
         <column name="property_set_id" type="INTEGER"/>
         <foreign-key foreignTable="property">
             <reference local="property_id" foreign="id"/>
@@ -220,14 +205,9 @@
         </unique>
         <behavior name="versionable"/>
     </table>
-    <table name="property_set_permission">
-        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="property_set_id" type="INTEGER" required="true"/>
-        <column name="user_group_id" type="INTEGER" required="true"/>
-        <unique>
-            <unique-column name="user_group_id"/>
-            <unique-column name="property_set_id"/>
-        </unique>
+    <table name="property_set_permission" isCrossRef="true">
+        <column name="property_set_id" type="INTEGER" required="true" primaryKey="true"/>
+        <column name="user_group_id" type="INTEGER" required="true" primaryKey="true"/>
         <foreign-key foreignTable="property_set">
             <reference local="property_set_id" foreign="id"/>
         </foreign-key>
@@ -267,14 +247,9 @@
             <unique-column name="name"/>
         </unique>
     </table>
-    <table name="target_permission">
-        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="target_id" type="INTEGER" required="true"/>
-        <column name="user_group_id" type="INTEGER" required="true"/>
-        <unique>
-            <unique-column name="target_id"/>
-            <unique-column name="user_group_id"/>
-        </unique>
+    <table name="target_permission" isCrossRef="true">
+        <column name="target_id" type="INTEGER" required="true" primaryKey="true"/>
+        <column name="user_group_id" type="INTEGER" required="true" primaryKey="true"/>
         <foreign-key foreignTable="target">
             <reference local="target_id" foreign="id"/>
         </foreign-key>
@@ -302,31 +277,19 @@
             <reference local="target_package_status_id" foreign="id"/>
         </foreign-key>
     </table>
-    <table name="target_role" idMethod="native" phpName="TargetRole">
-        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="target_id" type="INTEGER" required="true"/>
-        <column name="role_id" type="INTEGER" required="true"/>
-        <unique>
-            <unique-column name="target_id"/>
-            <unique-column name="version"/>
-            <unique-column name="role_id"/>
-        </unique>
+    <table name="target_role" isCrossRef="true">
+        <column name="target_id" type="INTEGER" required="true" primaryKey="true"/>
+        <column name="role_id" type="INTEGER" required="true" primaryKey="true"/>
         <foreign-key foreignTable="target">
             <reference local="target_id" foreign="id"/>
         </foreign-key>
         <foreign-key foreignTable="role">
             <reference local="role_id" foreign="id"/>
         </foreign-key>
-        <behavior name="versionable" />
     </table>
-    <table name="user_group_membership">
-        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-        <column name="user_group_id" type="INTEGER" required="true"/>
-        <column name="user_id" required="true" type="INTEGER"/>
-        <unique>
-            <unique-column name="user_group_id"/>
-            <unique-column name="user_id"/>
-        </unique>
+    <table name="user_group_membership" isCrossRef="true">
+        <column name="user_group_id" type="INTEGER" required="true" primaryKey="true"/>
+        <column name="user_id" required="true" type="INTEGER" primaryKey="true"/>
         <foreign-key foreignTable="user">
             <reference local="user_id" foreign="id"/>
         </foreign-key>

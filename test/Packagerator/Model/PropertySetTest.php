@@ -13,13 +13,13 @@ class PropertySetTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $packageSet->getId());
 
         $propertyValue = new PropertyValue();
-        $propertyValue->setPropertyId('AUTH_API_URL');
+        $propertyValue->setProperty(PropertyQuery::create()->findOneByIdentifier('AUTH_API_URL'));
         $propertyValue->setValue('http://test.com');
         $packageSet->addPropertyValue($propertyValue);
         $packageSet->save();
 
         $criteria = new Criteria();
-        $criteria->add('property_id', 'AUTH_API_URL');
+        $criteria->add('property_id', PropertyQuery::create()->findOneByIdentifier('AUTH_API_URL')->getId());
 
         /** @var PropertyValue $propertyValue */
         $propertyValue = $packageSet->getPropertyValues($criteria)->getFirst();

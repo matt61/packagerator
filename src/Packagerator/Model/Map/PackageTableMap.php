@@ -216,6 +216,8 @@ class PackageTableMap extends TableMap
     1 => ':id',
   ),
 ), 'CASCADE', null, 'PackageVersions', false);
+        $this->addRelation('UserGroup', '\\Packagerator\\Model\\UserGroup', RelationMap::MANY_TO_MANY, array(), null, null, 'UserGroups');
+        $this->addRelation('Role', '\\Packagerator\\Model\\Role', RelationMap::MANY_TO_MANY, array(), null, null, 'Roles');
     } // buildRelations()
 
     /**

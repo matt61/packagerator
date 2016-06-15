@@ -168,6 +168,10 @@ class UserGroupTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'UserGroupMemberships', false);
+        $this->addRelation('Package', '\\Packagerator\\Model\\Package', RelationMap::MANY_TO_MANY, array(), null, null, 'Packages');
+        $this->addRelation('PropertySet', '\\Packagerator\\Model\\PropertySet', RelationMap::MANY_TO_MANY, array(), null, null, 'PropertySets');
+        $this->addRelation('Target', '\\Packagerator\\Model\\Target', RelationMap::MANY_TO_MANY, array(), null, null, 'Targets');
+        $this->addRelation('User', '\\Packagerator\\Model\\User', RelationMap::MANY_TO_MANY, array(), null, null, 'Users');
     } // buildRelations()
 
     /**

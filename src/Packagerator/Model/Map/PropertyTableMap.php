@@ -59,7 +59,7 @@ class PropertyTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class PropertyTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the id field
@@ -77,9 +77,14 @@ class PropertyTableMap extends TableMap
     const COL_ID = 'property.id';
 
     /**
-     * the column name for the name field
+     * the column name for the identifier field
      */
-    const COL_NAME = 'property.name';
+    const COL_IDENTIFIER = 'property.identifier';
+
+    /**
+     * the column name for the description field
+     */
+    const COL_DESCRIPTION = 'property.description';
 
     /**
      * the column name for the property_type_id field
@@ -98,11 +103,11 @@ class PropertyTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'PropertyTypeId', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'propertyTypeId', ),
-        self::TYPE_COLNAME       => array(PropertyTableMap::COL_ID, PropertyTableMap::COL_NAME, PropertyTableMap::COL_PROPERTY_TYPE_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'name', 'property_type_id', ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Id', 'Identifier', 'Description', 'PropertyTypeId', ),
+        self::TYPE_CAMELNAME     => array('id', 'identifier', 'description', 'propertyTypeId', ),
+        self::TYPE_COLNAME       => array(PropertyTableMap::COL_ID, PropertyTableMap::COL_IDENTIFIER, PropertyTableMap::COL_DESCRIPTION, PropertyTableMap::COL_PROPERTY_TYPE_ID, ),
+        self::TYPE_FIELDNAME     => array('id', 'identifier', 'description', 'property_type_id', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -112,11 +117,11 @@ class PropertyTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'PropertyTypeId' => 2, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'propertyTypeId' => 2, ),
-        self::TYPE_COLNAME       => array(PropertyTableMap::COL_ID => 0, PropertyTableMap::COL_NAME => 1, PropertyTableMap::COL_PROPERTY_TYPE_ID => 2, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'name' => 1, 'property_type_id' => 2, ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Identifier' => 1, 'Description' => 2, 'PropertyTypeId' => 3, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'identifier' => 1, 'description' => 2, 'propertyTypeId' => 3, ),
+        self::TYPE_COLNAME       => array(PropertyTableMap::COL_ID => 0, PropertyTableMap::COL_IDENTIFIER => 1, PropertyTableMap::COL_DESCRIPTION => 2, PropertyTableMap::COL_PROPERTY_TYPE_ID => 3, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'identifier' => 1, 'description' => 2, 'property_type_id' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -134,10 +139,11 @@ class PropertyTableMap extends TableMap
         $this->setIdentifierQuoting(false);
         $this->setClassName('\\Packagerator\\Model\\Property');
         $this->setPackage('Packagerator.Model');
-        $this->setUseIdGenerator(false);
+        $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'VARCHAR', true, 50, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', true, 50, null);
+        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('identifier', 'Identifier', 'VARCHAR', true, 50, null);
+        $this->addColumn('description', 'Description', 'VARCHAR', true, 150, null);
         $this->addForeignKey('property_type_id', 'PropertyTypeId', 'INTEGER', 'property_type', 'id', true, null, null);
     } // initialize()
 
@@ -206,7 +212,7 @@ class PropertyTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        return (string) $row[
+        return (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
                 : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
@@ -311,11 +317,13 @@ class PropertyTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(PropertyTableMap::COL_ID);
-            $criteria->addSelectColumn(PropertyTableMap::COL_NAME);
+            $criteria->addSelectColumn(PropertyTableMap::COL_IDENTIFIER);
+            $criteria->addSelectColumn(PropertyTableMap::COL_DESCRIPTION);
             $criteria->addSelectColumn(PropertyTableMap::COL_PROPERTY_TYPE_ID);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.identifier');
+            $criteria->addSelectColumn($alias . '.description');
             $criteria->addSelectColumn($alias . '.property_type_id');
         }
     }
@@ -414,6 +422,10 @@ class PropertyTableMap extends TableMap
             $criteria = clone $criteria; // rename for clarity
         } else {
             $criteria = $criteria->buildCriteria(); // build Criteria from Property object
+        }
+
+        if ($criteria->containsKey(PropertyTableMap::COL_ID) && $criteria->keyContainsValue(PropertyTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.PropertyTableMap::COL_ID.')');
         }
 
 

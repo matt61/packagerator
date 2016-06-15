@@ -147,6 +147,7 @@ class UserTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'UserGroupMemberships', false);
+        $this->addRelation('UserGroup', '\\Packagerator\\Model\\UserGroup', RelationMap::MANY_TO_MANY, array(), null, null, 'UserGroups');
     } // buildRelations()
 
     /**

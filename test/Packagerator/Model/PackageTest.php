@@ -2,6 +2,8 @@
 
 namespace Packagerator\Model;
 
+use Packagerator\Model\Base\PropertyQuery;
+
 class PackageTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate(){
@@ -26,7 +28,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $step->setPackageStepTypeId(1);
 
         $requiredProperty = new PackageProperty();
-        $requiredProperty->setPropertyId('AUTH_API_URL');
+        $requiredProperty->setProperty(PropertyQuery::create()->findOneByIdentifier('AUTH_API_URL'));
         $package->addPackageProperty($requiredProperty);
 
         $execution = new PackageStepExecution();
@@ -60,7 +62,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $propertySet = new PropertySet();
         $propertySet->setName(uniqid());
         $propertyValue = new PropertyValue();
-        $propertyValue->setPropertyId('AUTH_API_URL');
+        $propertyValue->setProperty(PropertyQuery::create()->findOneByIdentifier('AUTH_API_URL'));
         $propertyValue->setValue(1);
         $propertySet->addPropertyValue($propertyValue);
         $propertySet->save();
@@ -68,7 +70,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $deployment = new TargetPackageDeployment();
         $deployment->setPackage($package);
         $deployment->setPropertySet($propertySet);
-        $deployment->setTargetPackageStatusId(1);
+        $deployment->setTargetPackageStatus(TargetPackageStatusQuery::create()->findOneByName('waiting'));
 
         $target->addTargetPackageDeployment($deployment);
         $target->save();
