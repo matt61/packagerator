@@ -169,7 +169,7 @@
         <column name="input" type="VARCHAR" size="250" required="true"/>
         <column name="output_code" type="INTEGER"/>
         <column name="output_pattern" type="VARCHAR" size="250"/>
-        <foreign-key foreignTable="package_step">
+        <foreign-key foreignTable="package_step" refPhpName="Execution">
             <reference local="package_step_id" foreign="id"/>
         </foreign-key>
         <behavior name="sortable">
@@ -263,12 +263,20 @@
         <column name="package_id" required="true" type="INTEGER"/>
         <column name="property_set_id" required="true" type="INTEGER"/>
         <column name="target_package_status_id" required="true" type="INTEGER"/>
+        <column name="package_step_type_id" required="true" type="INTEGER"/>
+        <column name="user_id" required="true" type="INTEGER"/>
         <behavior name="timestampable" />
         <foreign-key foreignTable="target">
             <reference local="target_id" foreign="id"/>
         </foreign-key>
         <foreign-key foreignTable="package">
             <reference local="package_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="user">
+            <reference local="user_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="package_step_type">
+            <reference local="package_step_type_id" foreign="id"/>
         </foreign-key>
         <foreign-key foreignTable="property_set">
             <reference local="property_set_id" foreign="id"/>

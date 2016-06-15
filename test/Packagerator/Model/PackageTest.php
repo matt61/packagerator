@@ -1,8 +1,8 @@
 <?php
 
-namespace Packagerator\Model;
+namespace Packagerator\Model\Entity;
 
-use Packagerator\Model\Base\PropertyQuery;
+use Packagerator\Model\Processor\NullProcessor;
 
 class PackageTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,8 +21,14 @@ class PackageTest extends \PHPUnit_Framework_TestCase
      */
     private $propertySet;
 
+    /**
+     * @var NullProcessor
+     */
+    private $processor;
+
     public function setUp()
     {
+        $this->processor = new NullProcessor();
         $this->propertySet = new PropertySet();
         $this->propertySet->setName(uniqid());
 
@@ -56,12 +62,12 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $execution = new PackageStepExecution();
         $execution->setInput("echo 'foo'");
         $execution->setOutputPattern("/foo/");
-        $step->addPackageStepExecution($execution);
+        $step->addExecution($execution);
 
         $execution = new PackageStepExecution();
         $execution->setInput("echo 'bar'");
         $execution->setOutputPattern("/bar/");
-        $step->addPackageStepExecution($execution);
+        $step->addExecution($execution);
 
         $this->package->addStep($step);
         $this->package->save();
@@ -71,8 +77,14 @@ class PackageTest extends \PHPUnit_Framework_TestCase
 
     public function testDeploy()
     {
-        $deployment = $this->target->deploy($this->package, $this->propertySet);
+        $deployment = $this->target->deploy(
+            $this->package,
+            $this->propertySet,
+            PackageStepTypeQuery::create()->requireOneByName('install'),
+            UserQuery::create()->requireOneByEmail('mattward@sparkcentral.com')
+        );
         $this->assertEquals($deployment->getPackageId(), $this->package->getId());
+        $this->processor->process($deployment);
     }
 
     public function testDeepCreate(){

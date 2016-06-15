@@ -7,3 +7,4 @@ INSERT INTO property (identifier, description, property_type_id) VALUES
   ('MYSQL_URI', 'Mysql database uri', 1)
 ;
 INSERT INTO target_package_status (name) VALUES ('waiting'),('installing'),('installed'),('failed');
+INSERT INTO user (email) VALUES ('mattward@sparkcentral.com');

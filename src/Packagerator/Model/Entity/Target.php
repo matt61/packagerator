@@ -2,7 +2,9 @@
 
 namespace Packagerator\Model\Entity;
 
+use Packagerator\Model\Entity\Base\PackageStepType;
 use Packagerator\Model\Entity\Base\Target as BaseTarget;
+use Packagerator\Model\Entity\Base\User;
 
 /**
  * Skeleton subclass for representing a row from the 'target' table.
@@ -16,13 +18,15 @@ use Packagerator\Model\Entity\Base\Target as BaseTarget;
  */
 class Target extends BaseTarget
 {
-    public function deploy(Package $package, PropertySet $propertySet)
+    public function deploy(Package $package, PropertySet $propertySet, PackageStepType $packageStepType, User $user)
     {
         if ($package->isValid($propertySet)){
             $deployment = new TargetPackageDeployment();
             $deployment->setPackage($package);
             $deployment->setPropertySet($propertySet);
             $deployment->setTarget($this);
+            $deployment->setPackageStepType($packageStepType);
+            $deployment->setUser($user);
             $deployment->setTargetPackageStatus(TargetPackageStatusQuery::create()->findOneByName('waiting'));
             $deployment->save();
             return $deployment;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Packagerator\Model;
+namespace Packagerator\Model\Entity;
 
 use Propel\Runtime\ActiveQuery\Criteria;
 
