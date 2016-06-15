@@ -6,74 +6,83 @@ use Packagerator\Model\Base\PropertyQuery;
 
 class PackageTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCreate(){
-        $package = new Package();
-        $package->setName(uniqid());
-        $package->save();
-        $this->assertGreaterThan(0, $package->getId());
+    /**
+     * @var Package
+     */
+    private $package;
+
+    /**
+     * @var Target
+     */
+    private $target;
+
+    /**
+     * @var PropertySet
+     */
+    private $propertySet;
+
+    public function setUp()
+    {
+        $this->propertySet = new PropertySet();
+        $this->propertySet->setName(uniqid());
+
+        $propertyValue = new PropertyValue();
+        $propertyValue->setProperty(PropertyQuery::create()->requireOneByIdentifier('AUTH_API_URL'));
+        $propertyValue->setValue(1);
+        $this->propertySet->addPropertyValue($propertyValue);
+
+        $this->propertySet->save();
+
+        $this->target = new Target();
+        $this->target->setName(uniqid());
+        $this->target->setIp(uniqid());
+        $this->target->save();
+
+        $this->package = new Package();
+        $this->package->setName(uniqid());
+
+        $property = new PackageProperty();
+        $property->setProperty(PropertyQuery::create()->requireOneByIdentifier('AUTH_API_URL'));
+        $this->package->addPackageProperty($property);
+
+        $property = new PackageProperty();
+        $property->setProperty(PropertyQuery::create()->requireOneByIdentifier('MYSQL_URI'));
+        $this->package->addPackageProperty($property);
+
+        $step = new PackageStep();
+        $step->setName('Install PHP');
+        $step->setPackageStepType(PackageStepTypeQuery::create()->findOneByName('install'));
+
+        $execution = new PackageStepExecution();
+        $execution->setInput("echo 'foo'");
+        $execution->setOutputPattern("/foo/");
+        $step->addPackageStepExecution($execution);
+
+        $execution = new PackageStepExecution();
+        $execution->setInput("echo 'bar'");
+        $execution->setOutputPattern("/bar/");
+        $step->addPackageStepExecution($execution);
+
+        $this->package->addStep($step);
+        $this->package->save();
+
+        parent::setUp();
+    }
+
+    public function testDeploy()
+    {
+        $deployment = $this->target->deploy($this->package, $this->propertySet);
+        $this->assertEquals($deployment->getPackageId(), $this->package->getId());
     }
 
     public function testDeepCreate(){
-        $package = new Package();
-        $package->setName(uniqid());
-
         $artifact = new PackageDependancyArtifact();
         $artifact->setName('S3 Download');
         $artifact->setArtifactPath('s3://test');
         $artifact->setChecksum('abc');
         $artifact->setArtifactTypeId(1);
 
-        $step = new PackageStep();
-        $step->setName('Install nginx');
-        $step->setPackageStepTypeId(1);
-
-        $requiredProperty = new PackageProperty();
-        $requiredProperty->setProperty(PropertyQuery::create()->findOneByIdentifier('AUTH_API_URL'));
-        $package->addPackageProperty($requiredProperty);
-
-        $execution = new PackageStepExecution();
-        $execution->setInput("echo 'test");
-        $execution->setOutputCode(1);
-        $step->addPackageStepExecution($execution);
-
-        $package->addPackageDependancyArtifact($artifact);
-        $package->addStep($step);
-        $package->save();
-
-        $step = new PackageStep();
-        $step->setName('Install php');
-        $step->setPackageStepTypeId(1);
-
-        $execution = new PackageStepExecution();
-        $execution->setInput("echo 'test2");
-        $execution->setOutputCode(1);
-        $step->addPackageStepExecution($execution);
-
-        $package->addStep($step);
-        $package->save();
-
-        $this->assertEquals(2, $package->getVersion());
-
-        $target = new Target();
-        $target->setName(uniqid());
-        $target->setIp(uniqid());
-        $target->save();
-
-        $propertySet = new PropertySet();
-        $propertySet->setName(uniqid());
-        $propertyValue = new PropertyValue();
-        $propertyValue->setProperty(PropertyQuery::create()->findOneByIdentifier('AUTH_API_URL'));
-        $propertyValue->setValue(1);
-        $propertySet->addPropertyValue($propertyValue);
-        $propertySet->save();
-
-        $deployment = new TargetPackageDeployment();
-        $deployment->setPackage($package);
-        $deployment->setPropertySet($propertySet);
-        $deployment->setTargetPackageStatus(TargetPackageStatusQuery::create()->findOneByName('waiting'));
-
-        $target->addTargetPackageDeployment($deployment);
-        $target->save();
-
+        $this->package->addPackageDependancyArtifact($artifact);
+        $this->package->save();
     }
 }

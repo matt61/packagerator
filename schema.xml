@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore" namespace="Packagerator\Model">
+<database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore" namespace="Packagerator\Model\Entity">
     <vendor type="mysql">
         <parameter name="Engine" value="InnoDB"/>
     </vendor>
