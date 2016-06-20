@@ -12,15 +12,12 @@
     },
     "autoload": {
         "psr-0": {
-            "Packagerator\\Model": "src/Packagerator/Model",
-            "Packagerator\\Model\\Base": "src/Packagerator/Model/Base",
-            "Packagerator\\Model\\Map": "src/Packagerator/Model/Map",
-            "Packagerator\\Controller": "src/Packagerator/Controller"
+            "Packagerator": "src/Packagerator"
         }
     },
     "autoload-dev": {
         "psr-0": {
-            "Packagerator\\Model": "test/Packagerator/Model"
+            "Packagerator": "test/Packagerator"
         }
     },
     "scripts": {

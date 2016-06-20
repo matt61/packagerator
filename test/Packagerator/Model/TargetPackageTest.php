@@ -2,14 +2,11 @@
 
 namespace Packagerator\Model\Entity;
 
+use Packagerator\Model\Entity\Base\TargetPackageStatusQuery;
 use Packagerator\Model\Processor\NullProcessor;
 
-class PackageTest extends \PHPUnit_Framework_TestCase
+class TargetPackageTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Package
-     */
-    private $package;
 
     /**
      * @var Target
@@ -21,10 +18,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
      */
     private $propertySet;
 
-    /**
-     * @var NullProcessor
-     */
-    private $processor;
+    private $package;
 
     public function setUp()
     {
@@ -35,7 +29,6 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $propertyValue->setProperty(PropertyQuery::create()->requireOneByIdentifier('AUTH_API_URL'));
         $propertyValue->setValue(1);
         $this->propertySet->addPropertyValue($propertyValue);
-
         $this->propertySet->save();
 
         $this->target = new Target();
@@ -63,11 +56,6 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $execution->setOutputPattern("/foo/");
         $step->addExecution($execution);
 
-        $execution = new PackageStepExecution();
-        $execution->setInput("echo 'bar'");
-        $execution->setOutputPattern("/bar/");
-        $step->addExecution($execution);
-
         $this->package->addStep($step);
         $this->package->save();
 
@@ -76,24 +64,14 @@ class PackageTest extends \PHPUnit_Framework_TestCase
 
     public function testDeploy()
     {
-        $this->processor = new NullProcessor($this->target);
-        $this->target->prepareDeployment(
+
+        $deployment = $this->target->prepareDeployment(
             $this->package,
             $this->propertySet,
             PackageStepTypeQuery::create()->requireOneByName('install'),
             UserQuery::create()->requireOneByEmail('mattward@sparkcentral.com')
         );
-        $this->processor->process();
-    }
-
-    public function testDeepCreate(){
-        $artifact = new PackageDependancyArtifact();
-        $artifact->setName('S3 Download');
-        $artifact->setArtifactPath('s3://test');
-        $artifact->setChecksum('abc');
-        $artifact->setArtifactTypeId(1);
-
-        $this->package->addPackageDependancyArtifact($artifact);
-        $this->package->save();
+        $deployment->setTargetPackageStatus(TargetPackageStatusQuery::create()->requireOneByIdentifier('installed'));
+        $deployment->save();
     }
 }

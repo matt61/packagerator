@@ -18,7 +18,7 @@ use Packagerator\Model\Entity\Base\User;
  */
 class Target extends BaseTarget
 {
-    public function deploy(Package $package, PropertySet $propertySet, PackageStepType $packageStepType, User $user)
+    public function prepareDeployment(Package $package, PropertySet $propertySet, PackageStepType $packageStepType, User $user)
     {
         if ($package->isValid($propertySet)){
             $deployment = new TargetPackageDeployment();

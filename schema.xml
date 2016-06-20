@@ -266,7 +266,7 @@
         <column name="package_step_type_id" required="true" type="INTEGER"/>
         <column name="user_id" required="true" type="INTEGER"/>
         <behavior name="timestampable" />
-        <foreign-key foreignTable="target">
+        <foreign-key foreignTable="target" refPhpName="Deployment">
             <reference local="target_id" foreign="id"/>
         </foreign-key>
         <foreign-key foreignTable="package">
@@ -283,6 +283,16 @@
         </foreign-key>
         <foreign-key foreignTable="target_package_status">
             <reference local="target_package_status_id" foreign="id"/>
+        </foreign-key>
+    </table>
+    <table name="target_package" skipSql="true" isCrossRef="true">
+        <column name="target_id" required="true" type="INTEGER" primaryKey="true"/>
+        <column name="package_id" required="true" type="INTEGER" primaryKey="true"/>
+        <foreign-key foreignTable="target">
+            <reference local="target_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="package">
+            <reference local="package_id" foreign="id"/>
         </foreign-key>
     </table>
     <table name="target_role" isCrossRef="true">
