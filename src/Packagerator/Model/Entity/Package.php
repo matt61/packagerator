@@ -25,4 +25,22 @@ class Package extends BasePackage
         return true;
     }
 
+    public function stepsToArray()
+    {
+        return array_map(function(PackageStep $step){
+            return [
+                'id' => $step->getId(),
+                'name' => $step->getName(),
+                'execute' => array_map(function (PackageStepExecution $execution){
+                    return [
+                        'input' => $execution->getInput(),
+                        'output' => [
+                            'type' => ($execution->getOutputCode() ? 'code' : 'pattern'),
+                            'value' => ($execution->getOutputCode() ? $execution->getOutputCode() : $execution->getOutputPattern())
+                        ]
+                    ];
+                }, $step->getExecutions()->getArrayCopy())
+            ];
+        }, $this->getSteps()->getArrayCopy());
+    }
 }

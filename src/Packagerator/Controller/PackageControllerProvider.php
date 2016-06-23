@@ -1,8 +1,8 @@
 <?php
 namespace Packagerator\Controller;
 
-use Packagerator\Model\Package;
-use Packagerator\Model\PackageQuery;
+use Packagerator\Model\Entity\Package;
+use Packagerator\Model\Entity\PackageQuery;
 use Propel\Runtime\Map\TableMap;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,8 +14,9 @@ class PackageControllerProvider implements \Silex\ControllerProviderInterface
         $controllers = $app['controllers_factory'];
 
         $controllers->get('/{id}', function ($id) use ($app) {
-            return $app['twig']->render('package/view.twig', PackageQuery::create()->findPK($id)->toArray(TableMap::TYPE_FIELDNAME));
-        })->bind('package_view');
+            $package = PackageQuery::create()->requireOneById($id);
+            return $app['twig']->render('package/form.twig', $package);
+        })->bind('package_edit');
 
         $controllers->get('/', function () use ($app) {
             return $app['twig']->render('package/form.twig');

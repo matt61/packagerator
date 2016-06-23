@@ -16,5 +16,13 @@ use Packagerator\Model\Entity\Base\TargetPackageDeployment as BaseTargetPackageD
  */
 class TargetPackageDeployment extends BaseTargetPackageDeployment
 {
+    public function forJson()
+    {
+        return [
+            "target" => $this->getTarget()->toArray(),
+            "package" => $this->getPackage()->toArray(),
+            "steps" => $this->getPackage()->stepsToArray()
+        ];
+    }
 
 }

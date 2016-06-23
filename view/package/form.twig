@@ -3,7 +3,18 @@
 
     </head>
     <form method="POST">
-        <input type="text" name="name"/>
+        <table>
+            <tr>
+                <td>Name</td>
+                <td>
+                    <input type="text" name="name" value="{{ name }}"/>
+                </td>
+            </tr>
+            {% for step in steps %}
+                <li>{{ step.name|e }}</li>
+            {% endfor %}
+        </table>
+
         <input type="submit"/>
     </form>
 </html>
